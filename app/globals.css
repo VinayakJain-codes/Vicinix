@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #080808;
+  --color-bg-surface: #0f0f0f;
+  --color-bg-elevated: #141414;
+  --color-accent-orange: #f97316;
+  --color-accent-green: #22c55e;
+  --color-text-primary: #f5f5f5;
+  --color-text-muted: #6b7280;
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  
+  --font-bebas: var(--font-bebas-neue);
+  --font-syne: var(--font-syne);
+  --font-dm: var(--font-dm-sans);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+:root {
+  --bg-primary: #080808;
+  --bg-surface: #0f0f0f;
+  --bg-elevated: #141414;
+  --accent-orange: #f97316;
+  --accent-green: #22c55e;
+  --text-primary: #f5f5f5;
+  --text-muted: #6b7280;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --glow-orange: 0 0 40px rgba(249, 115, 22, 0.25);
+  --glow-green: 0 0 40px rgba(34, 197, 94, 0.20);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Hide default cursor globally */
+  cursor: none;
+}
+
+/* Ensure interactive elements also have no cursor by default since we use custom cursor */
+a, button, input, textarea, select {
+  cursor: none;
+}
+
+/* Utilities for border colors not covered by simple Tailwind mappings */
+@utility border-subtle {
+  border-color: var(--border-subtle);
+}
+
+@utility shadow-glow-orange {
+  box-shadow: var(--glow-orange);
+}
+
+@utility shadow-glow-green {
+  box-shadow: var(--glow-green);
+}
+
+/* Film grain keyframes */
+@keyframes noise {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  animation: noise 0.5s infinite;
+}
+
+/* Custom Selection */
+::selection {
+  background: var(--accent-orange);
+  color: var(--bg-primary);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-elevated);
+}
