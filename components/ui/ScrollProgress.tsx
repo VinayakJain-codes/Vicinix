@@ -1,36 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export default function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      
-      if (docHeight > 0) {
-        setProgress((scrollY / docHeight) * 100);
-      } else {
-        setProgress(0);
-      }
-    };
+    if (!progressRef.current) return;
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    
-    // Initial check
-    handleScroll();
+    // Use GSAP to animate scaleX based on scroll progress without React re-renders
+    gsap.to(progressRef.current, {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.1, // very tiny scrub for ultra-smoothness
+      }
+    });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars.trigger === document.body) st.kill();
+      });
     };
   }, []);
 
   return (
     <div 
-      className="fixed top-0 left-0 h-[2px] bg-accent-orange z-[100] origin-left transition-transform duration-100 ease-out"
-      style={{ transform: `scaleX(${progress / 100})`, width: "100%" }}
+      ref={progressRef}
+      className="fixed top-0 left-0 h-[2px] bg-accent-orange z-[100] origin-left"
+      style={{ transform: "scaleX(0)", width: "100%" }}
       aria-hidden="true"
     />
   );

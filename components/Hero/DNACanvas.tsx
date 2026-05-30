@@ -31,8 +31,8 @@ export default function DNACanvas() {
     <div className="w-full h-full absolute inset-0 z-0 cursor-none">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 45 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]} // limit to 2 for performance
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        dpr={[1, 1.5]} // Cap at 1.5x for performance while maintaining crispness
       >
         {/* Lights */}
         <ambientLight intensity={0.2} />
@@ -49,10 +49,10 @@ export default function DNACanvas() {
         <DNAHelix />
 
         {/* Post-processing effects */}
-        <EffectComposer>
+        <EffectComposer disableNormalPass multisampling={0}>
           <Bloom 
             luminanceThreshold={0.2} 
-            mipmapBlur 
+            luminanceSmoothing={0.9}
             intensity={1.2} 
           />
         </EffectComposer>

@@ -6,8 +6,6 @@ import gsap from "gsap";
 export default function CustomCursor() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isTextHovering, setIsTextHovering] = useState(false);
 
   useEffect(() => {
     // We only want to run this on desktop
@@ -54,7 +52,8 @@ export default function CustomCursor() {
         target.closest("a") || 
         target.closest("button")
       ) {
-        setIsHovering(true);
+        gsap.to(cursorRingRef.current, { scale: 1, opacity: 1, borderColor: "var(--accent-orange)", backgroundColor: "rgba(249, 115, 22, 0.1)", duration: 0.3 });
+        gsap.to(cursorDotRef.current, { width: 8, height: 8, y: 0, backgroundColor: "var(--accent-orange)", boxShadow: "0 0 10px rgba(249, 115, 22, 0.5)", duration: 0.2 });
       } 
       // Check for text elements
       else if (
@@ -65,13 +64,14 @@ export default function CustomCursor() {
         target.tagName.toLowerCase() === "span" ||
         window.getSelection()?.toString().length
       ) {
-        setIsTextHovering(true);
+        gsap.to(cursorRingRef.current, { scale: 0, opacity: 0, duration: 0.3 });
+        gsap.to(cursorDotRef.current, { width: 2, height: 24, y: -12, backgroundColor: "#ffffff", boxShadow: "none", duration: 0.2 });
       }
     };
 
     const handleMouseOut = () => {
-      setIsHovering(false);
-      setIsTextHovering(false);
+      gsap.to(cursorRingRef.current, { scale: 0.5, opacity: 0, borderColor: "var(--border-subtle)", backgroundColor: "transparent", duration: 0.3 });
+      gsap.to(cursorDotRef.current, { width: 8, height: 8, y: 0, backgroundColor: "#ffffff", boxShadow: "none", duration: 0.2 });
     };
 
     window.addEventListener("mousemove", onMouseMove);
@@ -91,19 +91,13 @@ export default function CustomCursor() {
       {/* Outer Ring */}
       <div 
         ref={cursorRingRef}
-        className={`fixed top-0 left-0 w-10 h-10 border border-border-subtle rounded-full pointer-events-none z-[100] transition-all duration-300 ${
-          isHovering ? "scale-100 border-accent-orange bg-accent-orange/10" : 
-          isTextHovering ? "scale-0 opacity-0" : "scale-50 opacity-0"
-        }`}
+        className="fixed top-0 left-0 w-10 h-10 border border-border-subtle rounded-full pointer-events-none z-[100] scale-50 opacity-0"
         aria-hidden="true"
       />
       {/* Inner Dot */}
       <div 
         ref={cursorDotRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[100] transition-all duration-200 ease-out origin-center ${
-          isHovering ? "w-2 h-2 bg-accent-orange rounded-full shadow-glow-orange" : 
-          isTextHovering ? "w-[2px] h-6 bg-white rounded-sm -translate-y-3" : "w-2 h-2 bg-white rounded-full"
-        }`}
+        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[100] origin-center"
         aria-hidden="true"
       />
     </>

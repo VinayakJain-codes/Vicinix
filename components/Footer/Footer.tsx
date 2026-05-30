@@ -15,8 +15,8 @@ export default function Footer() {
         
         <div className="mt-8 md:mt-12">
           <a 
-            href="mailto:mail@vicinix.co.in" 
-            className="group relative font-syne text-xl md:text-3xl text-text-muted hover:text-white transition-colors duration-300 cursor-none"
+            href="mailto:mail@vicinix.co.in?subject=Project%20Inquiry%20-%20Let's%20Build&body=Hi%20Vicinix%20Team%2C%0D%0A%0D%0AI'm%20interested%20in%20working%20with%20you%20on%20a%20project.%0D%0A%0D%0A[Please%20describe%20your%20project%20or%20idea%20here]%0D%0A%0D%0ABest%2C%0D%0A[Your%20Name]" 
+            className="group relative font-syne text-xl md:text-3xl text-text-muted hover:text-white transition-colors duration-300 cursor-none pointer-events-auto inline-block"
           >
             mail@vicinix.co.in
             {/* Hover Underline */}

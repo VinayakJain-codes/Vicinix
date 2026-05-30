@@ -51,9 +51,9 @@ export default function ServiceCard({ title, description, Icon, accentColor }: S
         
         {/* Animated Arrow */}
         <div className="mt-auto flex items-center self-end overflow-hidden">
-          <span className="font-syne font-semibold text-sm opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 flex items-center gap-2">
+          <a href="#work" className="font-syne font-semibold text-sm opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 flex items-center gap-2 cursor-none pointer-events-auto hover:text-white">
             Explore <ArrowRight size={16} />
-          </span>
+          </a>
         </div>
       </div>
     </div>
