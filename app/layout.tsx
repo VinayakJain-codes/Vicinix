@@ -30,13 +30,74 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const BASE_URL = "https://vicinix.co.in";
+
 export const metadata: Metadata = {
-  title: "Vicinix | Your Idea, Shipped.",
-  description: "We design and engineer digital products that don't just work — they convert.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Vicinix | Your Idea, Shipped.",
+    template: "%s | Vicinix",
+  },
+  description:
+    "Vicinix designs and engineers digital products that don't just work — they convert. Full-stack web development, SaaS, and AI-powered solutions for startups and enterprises.",
+  keywords: [
+    "Vicinix",
+    "web development",
+    "full stack developer",
+    "Next.js",
+    "SaaS development",
+    "startup development",
+    "India web agency",
+    "Vinayak Jain",
+    "UI/UX design",
+    "software engineering",
+  ],
+  authors: [{ name: "Vicinix", url: BASE_URL }],
+  creator: "Vicinix",
+  publisher: "Vicinix",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: BASE_URL,
+    siteName: "Vicinix",
+    title: "Vicinix | Your Idea, Shipped.",
+    description:
+      "We design and engineer digital products that don't just work — they convert. Full-stack web development and SaaS for startups.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Vicinix — Your Idea, Shipped.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vicinix | Your Idea, Shipped.",
+    description:
+      "We design and engineer digital products that don't just work — they convert.",
+    images: ["/og-image.png"],
+    creator: "@vicinix",
+  },
+  alternates: {
+    canonical: BASE_URL,
+  },
   icons: {
-    icon: "/vicinix.ico",
-    shortcut: "/vicinix.ico",
-    apple: "/vicinix.ico",
+    icon: "/Vicinix.ico",
+    shortcut: "/Vicinix.ico",
+    apple: "/Vicinix.ico",
   },
 };
 
