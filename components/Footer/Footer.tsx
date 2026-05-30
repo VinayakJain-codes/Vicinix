@@ -47,9 +47,8 @@ export default function Footer() {
         {/* Column 3: Socials */}
         <div className="flex flex-col gap-4">
           <span className="font-syne font-semibold text-white uppercase tracking-wider text-xs mb-2">Socials</span>
-          <a href="#" className="hover:text-accent-green transition-colors w-fit cursor-none">X (Twitter)</a>
-          <a href="#" className="hover:text-accent-green transition-colors w-fit cursor-none">LinkedIn</a>
-          <a href="#" className="hover:text-accent-green transition-colors w-fit cursor-none">GitHub</a>
+          <a href="https://www.linkedin.com/in/vinayak-jain-1786b9357/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-green transition-colors w-fit cursor-none pointer-events-auto">LinkedIn</a>
+          <a href="https://github.com/VinayakJain-codes" target="_blank" rel="noopener noreferrer" className="hover:text-accent-green transition-colors w-fit cursor-none pointer-events-auto">GitHub</a>
         </div>
 
         {/* Column 4: Status / Clock */}
