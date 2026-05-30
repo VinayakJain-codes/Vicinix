@@ -33,6 +33,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Vicinix | Your Idea, Shipped.",
   description: "We design and engineer digital products that don't just work — they convert.",
+  icons: {
+    icon: "/vicinix.ico",
+    shortcut: "/vicinix.ico",
+    apple: "/vicinix.ico",
+  },
 };
 
 export default function RootLayout({

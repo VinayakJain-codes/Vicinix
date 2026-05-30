@@ -9,14 +9,14 @@ export default function LiveClock() {
     // Initial set
     const updateClock = () => {
       const now = new Date();
-      const formatted = new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/New_York",
+      const formatted = new Intl.DateTimeFormat("en-IN", {
+        timeZone: "Asia/Kolkata",
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
       }).format(now);
       
-      setTime(`NYC ${formatted}`);
+      setTime(`IST ${formatted}`);
     };
 
     updateClock();
