@@ -49,7 +49,7 @@ export default function DNACanvas() {
         <DNAHelix />
 
         {/* Post-processing effects */}
-        <EffectComposer disableNormalPass multisampling={0}>
+        <EffectComposer enableNormalPass={false} multisampling={0}>
           <Bloom 
             luminanceThreshold={0.2} 
             luminanceSmoothing={0.9}
