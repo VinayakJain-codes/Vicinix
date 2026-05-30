@@ -1,104 +1,150 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-  const cursorRingRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    // We only want to run this on desktop
+    // Touch devices — hide entirely
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const cursorDot = cursorDotRef.current;
-    const cursorRing = cursorRingRef.current;
-    
-    if (!cursorDot || !cursorRing) return;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
-    // Set initial position
-    gsap.set([cursorDot, cursorRing], { xPercent: -50, yPercent: -50 });
+    // Hide native cursor on the whole page
+    document.documentElement.style.cursor = "none";
 
-    const mouse = { x: 0, y: 0 };
-    const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    // Raw mouse coords (updated synchronously on every mousemove)
+    const mouse = { x: -100, y: -100 };
+    // Smoothed ring coords
+    const smooth = { x: -100, y: -100 };
+
+    // State flags — plain booleans, no setState
+    let isLink = false;
 
     const onMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
-      
-      // Update dot instantly
-      gsap.set(cursorDot, { x: mouse.x, y: mouse.y });
     };
 
-    // Use GSAP ticker to smoothly follow the mouse with the ring
-    const ticker = gsap.ticker.add(() => {
-      // Lerp for smooth trailing effect
-      const dt = 1.0 - Math.pow(1.0 - 0.2, gsap.ticker.deltaRatio());
-      
-      pos.x += (mouse.x - pos.x) * dt;
-      pos.y += (mouse.y - pos.y) * dt;
-      
-      gsap.set(cursorRing, { x: pos.x, y: pos.y });
-    });
+    const onMouseOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      const interactive =
+        t.tagName === "A" ||
+        t.tagName === "BUTTON" ||
+        !!t.closest("a") ||
+        !!t.closest("button");
 
-    // Handle interactive elements
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      
-      // Check for links, buttons
-      if (
-        target.tagName.toLowerCase() === "a" || 
-        target.tagName.toLowerCase() === "button" ||
-        target.closest("a") || 
-        target.closest("button")
-      ) {
-        gsap.to(cursorRingRef.current, { scale: 1, opacity: 1, borderColor: "var(--accent-orange)", backgroundColor: "rgba(249, 115, 22, 0.1)", duration: 0.3 });
-        gsap.to(cursorDotRef.current, { width: 8, height: 8, y: 0, backgroundColor: "var(--accent-orange)", boxShadow: "0 0 10px rgba(249, 115, 22, 0.5)", duration: 0.2 });
-      } 
-      // Check for text elements
-      else if (
-        target.tagName.toLowerCase() === "p" || 
-        target.tagName.toLowerCase() === "h1" ||
-        target.tagName.toLowerCase() === "h2" ||
-        target.tagName.toLowerCase() === "h3" ||
-        target.tagName.toLowerCase() === "span" ||
-        window.getSelection()?.toString().length
-      ) {
-        gsap.to(cursorRingRef.current, { scale: 0, opacity: 0, duration: 0.3 });
-        gsap.to(cursorDotRef.current, { width: 2, height: 24, y: -12, backgroundColor: "#ffffff", boxShadow: "none", duration: 0.2 });
+      if (interactive !== isLink) {
+        isLink = interactive;
+        if (isLink) {
+          dot.style.width = "12px";
+          dot.style.height = "12px";
+          dot.style.backgroundColor = "#f97316";
+          dot.style.boxShadow = "0 0 12px rgba(249,115,22,0.6)";
+          ring.style.width = "44px";
+          ring.style.height = "44px";
+          ring.style.borderColor = "#f97316";
+          ring.style.backgroundColor = "rgba(249,115,22,0.08)";
+          ring.style.opacity = "1";
+        } else {
+          dot.style.width = "8px";
+          dot.style.height = "8px";
+          dot.style.backgroundColor = "#ffffff";
+          dot.style.boxShadow = "none";
+          ring.style.width = "36px";
+          ring.style.height = "36px";
+          ring.style.borderColor = "rgba(255,255,255,0.25)";
+          ring.style.backgroundColor = "transparent";
+          ring.style.opacity = "0";
+        }
       }
     };
 
-    const handleMouseOut = () => {
-      gsap.to(cursorRingRef.current, { scale: 0.5, opacity: 0, borderColor: "var(--border-subtle)", backgroundColor: "transparent", duration: 0.3 });
-      gsap.to(cursorDotRef.current, { width: 8, height: 8, y: 0, backgroundColor: "#ffffff", boxShadow: "none", duration: 0.2 });
+    const onMouseEnter = () => {
+      ring.style.opacity = isLink ? "1" : "0.5";
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    document.body.addEventListener("mouseover", handleMouseOver);
-    document.body.addEventListener("mouseout", handleMouseOut);
+    const onMouseLeave = () => {
+      ring.style.opacity = "0";
+    };
+
+    // rAF loop — runs at display refresh rate (60/120/144 Hz)
+    // Factor: how fast the ring catches the dot (0–1). Higher = snappier.
+    const LERP = 0.18;
+
+    const tick = () => {
+      // Dot: instant 1:1 tracking
+      dot.style.transform = `translate(${mouse.x - 4}px, ${mouse.y - 4}px)`;
+
+      // Ring: smooth lerp
+      smooth.x += (mouse.x - smooth.x) * LERP;
+      smooth.y += (mouse.y - smooth.y) * LERP;
+      ring.style.transform = `translate(${smooth.x - 18}px, ${smooth.y - 18}px)`;
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.addEventListener("mouseover", onMouseOver, { passive: true });
+    document.addEventListener("mouseenter", onMouseEnter, { passive: true });
+    document.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
     return () => {
+      cancelAnimationFrame(rafRef.current);
+      document.documentElement.style.cursor = "";
       window.removeEventListener("mousemove", onMouseMove);
-      document.body.removeEventListener("mouseover", handleMouseOver);
-      document.body.removeEventListener("mouseout", handleMouseOut);
-      gsap.ticker.remove(ticker);
+      document.removeEventListener("mouseover", onMouseOver);
+      document.removeEventListener("mouseenter", onMouseEnter);
+      document.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 
   return (
     <>
-      {/* Outer Ring */}
-      <div 
-        ref={cursorRingRef}
-        className="fixed top-0 left-0 w-10 h-10 border border-border-subtle rounded-full pointer-events-none z-[100] scale-50 opacity-0"
+      {/* Dot — instant 1:1 with mouse */}
+      <div
+        ref={dotRef}
         aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "8px",
+          height: "8px",
+          borderRadius: "50%",
+          backgroundColor: "#ffffff",
+          pointerEvents: "none",
+          zIndex: 9999,
+          willChange: "transform",
+          transform: "translate(-100px, -100px)",
+        }}
       />
-      {/* Inner Dot */}
-      <div 
-        ref={cursorDotRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[100] origin-center"
+      {/* Ring — smooth trailing */}
+      <div
+        ref={ringRef}
         aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "36px",
+          height: "36px",
+          borderRadius: "50%",
+          border: "1px solid rgba(255,255,255,0.25)",
+          pointerEvents: "none",
+          zIndex: 9998,
+          opacity: 0,
+          willChange: "transform",
+          transform: "translate(-100px, -100px)",
+          transition: "width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s, opacity 0.15s",
+        }}
       />
     </>
   );
