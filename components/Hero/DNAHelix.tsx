@@ -66,6 +66,18 @@ export default function DNAHelix() {
     // Get exact scroll progress mapped from GSAP
     const progress = useScrollStore.getState().heroScrollProgress;
 
+    // --- WebGL Panning (Replaces HTML width animation) ---
+    // The canvas is now 100% width. We want the DNA to start centered in the right 50% of the screen.
+    // The center of the right 50% is exactly at x = viewport.width / 4.
+    const startX = state.viewport.width / 4;
+    
+    // We want to pan it to the center (x = 0) as scroll progress goes from 0 to 0.5.
+    const panProgress = Math.max(0, Math.min(1, progress * 2));
+    const easedPan = 1 - Math.pow(1 - panProgress, 2); // easeOutQuad
+    
+    groupRef.current.position.x = startX * (1 - easedPan);
+    // -----------------------------------------------------
+
     // Continuous slow rotation on Y axis
     const baseRotation = state.clock.elapsedTime * 0.15;
 

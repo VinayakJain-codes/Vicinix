@@ -22,8 +22,8 @@ export default function Home() {
               <HeroText />
             </div>
 
-            {/* Right 50% - DNA Canvas */}
-            <div className="absolute right-0 top-0 h-full hidden md:flex w-1/2 z-0 dna-wrapper">
+            {/* DNA Canvas - Full Screen (Animations handled in WebGL) */}
+            <div className="absolute inset-0 w-full h-full z-0 dna-wrapper pointer-events-none">
               <DNACanvasWrapper />
             </div>
             

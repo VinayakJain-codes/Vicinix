@@ -39,12 +39,7 @@ export default function HeroPin({ children }: { children: React.ReactNode }) {
       ease: "power2.inOut"
     }, 0);
 
-    // 0 -> 50% scroll: Expand DNA Canvas to full screen
-    tl.to(".dna-wrapper", {
-      width: "100%",
-      duration: 0.5,
-      ease: "power2.inOut"
-    }, 0);
+    // (Removed slow HTML width animation to use fast WebGL camera panning instead)
 
     return () => {
       // Clean up ScrollTrigger on unmount
