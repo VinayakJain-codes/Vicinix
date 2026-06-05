@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import GrainOverlay from "@/components/ui/GrainOverlay";
 import CustomCursor from "@/components/ui/CustomCursor";
@@ -113,6 +114,7 @@ export default function RootLayout({
         <ScrollProgress />
         <CustomCursor />
         {children}
+        <Analytics />
       </body>
     </html>
   );
