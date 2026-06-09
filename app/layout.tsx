@@ -4,6 +4,7 @@ import "./globals.css";
 import GrainOverlay from "@/components/ui/GrainOverlay";
 import CustomCursor from "@/components/ui/CustomCursor";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import { Analytics } from "@vercel/analytics/next";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -113,6 +114,7 @@ export default function RootLayout({
         <ScrollProgress />
         <CustomCursor />
         {children}
+        <Analytics />
       </body>
     </html>
   );
