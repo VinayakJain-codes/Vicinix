@@ -32,8 +32,8 @@ const BASE_URL = "https://vicinix.co.in";
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#030303" },
     { media: "(prefers-color-scheme: light)", color: "#FAF8F5" },
+    { media: "(prefers-color-scheme: dark)", color: "#030303" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -116,6 +116,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="light"
       suppressHydrationWarning
       className={`${cinzel.variable} ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
@@ -125,7 +126,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('vicinix-theme') || 'dark';
+                  var theme = localStorage.getItem('vicinix-theme') || 'light';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
               })();

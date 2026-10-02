@@ -411,7 +411,7 @@ export default function DinerTablePage() {
                         <button
                           type="button"
                           onClick={() => removeFromCart(item.id)}
-                          className="text-[var(--gold-primary)] hover:text-white"
+                          className="text-[var(--gold-primary)] hover:text-[var(--text-primary)]"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
@@ -421,7 +421,7 @@ export default function DinerTablePage() {
                         <button
                           type="button"
                           onClick={() => addToCart(item)}
-                          className="text-[var(--gold-primary)] hover:text-white"
+                          className="text-[var(--gold-primary)] hover:text-[var(--text-primary)]"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -505,7 +505,7 @@ export default function DinerTablePage() {
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
-                        className="text-[var(--text-muted)] hover:text-white"
+                        className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
@@ -513,7 +513,7 @@ export default function DinerTablePage() {
                       <button
                         type="button"
                         onClick={() => addToCart(item)}
-                        className="text-[var(--text-muted)] hover:text-white"
+                        className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
