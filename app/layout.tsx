@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
-import { Bebas_Neue, Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Cinzel, Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import GrainOverlay from "@/components/ui/GrainOverlay";
-import CustomCursor from "@/components/ui/CustomCursor";
-import ScrollProgress from "@/components/ui/ScrollProgress";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { OrganizationJsonLd } from "@/components/JsonLd";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
+const cinzel = Cinzel({
   subsets: ["latin"],
-  variable: "--font-bebas-neue",
+  variable: "--font-cinzel",
   display: "swap",
 });
 
@@ -32,29 +30,40 @@ const jetbrainsMono = JetBrains_Mono({
 
 const BASE_URL = "https://vicinix.co.in";
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#030303" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF8F5" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Vicinix | Your Idea, Shipped.",
+    default: "Vicinix — High-Performance Software for Security, Finance & IT Logistics",
     template: "%s | Vicinix",
   },
   description:
-    "Vicinix designs and engineers digital products that don't just work — they convert. Full-stack web development, SaaS, and AI-powered solutions for startups and enterprises.",
+    "Vicinix builds sovereign digital software across Security Operations, Modern Finance, and IT Enterprise Logistics. Explore our suite or commission custom software.",
   keywords: [
     "Vicinix",
-    "web development",
-    "full stack developer",
-    "Next.js",
-    "SaaS development",
-    "startup development",
-    "India web agency",
-    "Vinayak Jain",
-    "UI/UX design",
-    "software engineering",
+    "Vicinix Security",
+    "Vicinix Guard",
+    "Vicinix Finance",
+    "Vicinix Tax",
+    "Vicinix Invoice",
+    "Vicinix IT Solutions",
+    "Vicinix Events",
+    "Vicinix Menu",
+    "Vicinix ERP",
+    "Enterprise Software India",
+    "Custom Software Engineering",
   ],
-  authors: [{ name: "Vicinix", url: BASE_URL }],
+  authors: [{ name: "Vicinix Technologies", url: BASE_URL }],
   creator: "Vicinix",
-  publisher: "Vicinix",
+  publisher: "Vicinix Technologies",
   robots: {
     index: true,
     follow: true,
@@ -68,26 +77,26 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_IN",
+    locale: "en_US",
     url: BASE_URL,
     siteName: "Vicinix",
-    title: "Vicinix | Your Idea, Shipped.",
+    title: "Vicinix — High-Performance Software Suite",
     description:
-      "We design and engineer digital products that don't just work — they convert. Full-stack web development and SaaS for startups.",
+      "A sovereign multi-product ecosystem powering security management, modern tax & invoicing, and enterprise logistics.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Vicinix — Your Idea, Shipped.",
+        alt: "Vicinix — Sovereign Software Suite",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vicinix | Your Idea, Shipped.",
+    title: "Vicinix — High-Performance Software Suite",
     description:
-      "We design and engineer digital products that don't just work — they convert.",
+      "A sovereign multi-product ecosystem powering security management, modern tax & invoicing, and enterprise logistics.",
     images: ["/og-image.png"],
     creator: "@vicinix",
   },
@@ -95,9 +104,7 @@ export const metadata: Metadata = {
     canonical: BASE_URL,
   },
   icons: {
-    icon: "/Vicinix.ico",
-    shortcut: "/Vicinix.ico",
-    apple: "/Vicinix.ico",
+    icon: "/favicon.ico",
   },
 };
 
@@ -107,12 +114,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased min-h-screen selection:bg-accent-orange selection:text-black">
-        <GrainOverlay />
-        <ScrollProgress />
-        <CustomCursor />
-        {children}
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${cinzel.variable} ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('vicinix-theme') || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300">
+        <OrganizationJsonLd />
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

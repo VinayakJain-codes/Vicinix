@@ -1,100 +1,226 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #080808;
-  --color-bg-surface: #0f0f0f;
-  --color-bg-elevated: #141414;
-  --color-accent-orange: #f97316;
-  --color-accent-green: #22c55e;
-  --color-text-primary: #f5f5f5;
-  --color-text-muted: #6b7280;
-  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-highlight: var(--border-highlight);
   
-  --font-bebas: var(--font-bebas-neue);
-  --font-syne: var(--font-syne);
-  --font-dm: var(--font-dm-sans);
+  --color-gold-primary: var(--gold-primary);
+  --color-gold-hover: var(--gold-hover);
+  --color-gold-muted: var(--gold-muted);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-gold: var(--gold-primary);
+  
+  --font-display: var(--font-display, var(--font-syne));
+  --font-body: var(--font-body, var(--font-dm-sans));
   --font-mono: var(--font-jetbrains-mono);
 }
 
-:root {
-  --bg-primary: #080808;
-  --bg-surface: #0f0f0f;
-  --bg-elevated: #141414;
-  --accent-orange: #f97316;
-  --accent-green: #22c55e;
-  --text-primary: #f5f5f5;
-  --text-muted: #6b7280;
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --glow-orange: 0 0 40px rgba(249, 115, 22, 0.25);
-  --glow-green: 0 0 40px rgba(34, 197, 94, 0.20);
+/* =========================================================================
+   VICINIX LIQUID GLASS & APPLE-GRADE DUAL-THEME DESIGN SYSTEM
+   - Dark Mode: Pitch black canvas + frosted liquid glass + gold accents
+   - Light Mode: Warm cream canvas + luminous liquid glass + bronze-gold
+   ========================================================================= */
+
+:root,
+[data-theme="dark"] {
+  --bg-base: #020203;
+  --bg-surface: rgba(14, 14, 18, 0.65);
+  --bg-elevated: rgba(22, 22, 28, 0.75);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(212, 175, 55, 0.35);
+  
+  --gold-primary: #D4AF37;
+  --gold-hover: #F3E5AB;
+  --gold-muted: #997B28;
+  --gold-glow: 0 0 35px rgba(212, 175, 55, 0.18);
+  
+  --text-primary: #F5F5F7;
+  --text-muted: #8E8E93;
+  --text-gold: #D4AF37;
+
+  --badge-bg: rgba(212, 175, 55, 0.08);
+  --badge-border: rgba(212, 175, 55, 0.25);
+  
+  --navbar-bg: rgba(4, 4, 6, 0.68);
+  --dropdown-bg: rgba(12, 12, 16, 0.85);
+
+  --glass-bg: rgba(14, 14, 18, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="light"] {
+  --bg-base: #FAF8F5;
+  --bg-surface: rgba(255, 255, 255, 0.72);
+  --bg-elevated: rgba(246, 242, 235, 0.82);
+  --border-subtle: rgba(0, 0, 0, 0.07);
+  --border-highlight: rgba(163, 112, 44, 0.38);
+  
+  --gold-primary: #A3702C;
+  --gold-hover: #7A531C;
+  --gold-muted: #B8860B;
+  --gold-glow: 0 0 35px rgba(163, 112, 44, 0.14);
+  
+  --text-primary: #1C1917;
+  --text-muted: #57534E;
+  --text-gold: #A3702C;
+
+  --badge-bg: rgba(163, 112, 44, 0.08);
+  --badge-border: rgba(163, 112, 44, 0.28);
+  
+  --navbar-bg: rgba(250, 248, 245, 0.75);
+  --dropdown-bg: rgba(255, 255, 255, 0.90);
+
+  --glass-bg: rgba(255, 255, 255, 0.70);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 20px 50px -12px rgba(163, 112, 44, 0.08);
+}
+
+/* Base Body Styles */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-base);
   color: var(--text-primary);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Hide default cursor globally */
-  cursor: none;
-}
-
-/* Ensure interactive elements also have no cursor by default since we use custom cursor */
-a, button, input, textarea, select {
-  cursor: none;
-}
-
-/* Utilities for border colors not covered by simple Tailwind mappings */
-@utility border-subtle {
-  border-color: var(--border-subtle);
-}
-
-@utility shadow-glow-orange {
-  box-shadow: var(--glow-orange);
-}
-
-@utility shadow-glow-green {
-  box-shadow: var(--glow-green);
-}
-
-/* Film grain keyframes */
-@keyframes noise {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0%); }
-  70% { transform: translate(0%, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
-}
-
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  pointer-events: none;
-  animation: noise 0.5s infinite;
+  transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
 }
 
 /* Custom Selection */
 ::selection {
-  background: var(--accent-orange);
-  color: var(--bg-primary);
+  background: var(--gold-primary);
+  color: #000000;
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-surface);
-  border-radius: 4px;
+  background: var(--border-subtle);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-muted);
+}
+
+/* =========================================================================
+   LIQUID GLASS UTILITIES & SPECULAR REFLECTION
+   ========================================================================= */
+
+.liquid-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-specular), var(--glass-shadow);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass:hover {
+  border-color: var(--border-highlight);
+  transform: translateY(-3px);
+  box-shadow: var(--glass-specular), 0 25px 60px -15px rgba(212, 175, 55, 0.12), var(--glass-shadow);
+}
+
+[data-theme="light"] .liquid-glass:hover {
+  box-shadow: var(--glass-specular), 0 25px 60px -15px rgba(163, 112, 44, 0.10), var(--glass-shadow);
+}
+
+.liquid-glass-elevated {
   background: var(--bg-elevated);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-specular), 0 30px 70px -20px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-pill {
+  background: var(--badge-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-highlight);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-ease {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Liquid Ambient Orbs */
+.liquid-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(100px);
+  pointer-events: none;
+  opacity: 0.15;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+  100% {
+    transform: translate(-30px, 40px) scale(0.95);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+/* Gold Gradient Utilities */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, #FAF0CA 50%, var(--gold-muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .text-gold-gradient {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, #D4AF37 50%, #7A531C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-gold-subtle {
+  border-color: var(--border-subtle);
+}
+
+.border-gold-highlight {
+  border-color: var(--border-highlight);
+}
+
+.glow-gold {
+  box-shadow: var(--gold-glow);
 }
