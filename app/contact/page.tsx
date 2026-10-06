@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -9,13 +9,12 @@ import {
   Send,
   CheckCircle2,
   ArrowRight,
-  Shield,
-  DollarSign,
-  Cpu,
   Clock,
+  AlertCircle,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
+import { sendContactEmail } from "@/lib/emailjs";
 
 function ContactForm() {
   const searchParams = useSearchParams();
@@ -32,20 +31,24 @@ function ContactForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (initialSubject && !formData.subject) {
-      setFormData((prev) => ({ ...prev, subject: initialSubject }));
-    }
-  }, [initialSubject, formData.subject]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage(null);
+
+    const result = await sendContactEmail(formData);
+    setIsSubmitting(false);
+
+    if (result.success) {
       setSubmitted(true);
-    }, 600);
+    } else {
+      setErrorMessage(
+        result.error ||
+          "Failed to transmit message. Please retry or write directly to mail@vicinix.co.in."
+      );
+    }
   };
 
   return (
@@ -132,14 +135,26 @@ function ContactForm() {
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <h3 className="font-serif text-2xl font-bold text-[var(--text-primary)] mb-2">
-              Message Dispatched
+              Message Recorded
             </h3>
-            <p className="text-sm text-[var(--text-muted)] max-w-md mx-auto mb-6">
-              Thank you, <span className="text-[var(--text-primary)] font-semibold">{formData.name}</span>. Your message has been routed to our team. We will reply to <span className="text-[var(--gold-primary)] font-semibold">{formData.email}</span> shortly.
+            <p className="text-sm text-[var(--text-muted)] max-w-md mx-auto mb-3">
+              Thank you, <span className="text-[var(--text-primary)] font-semibold">{formData.name}</span>. Your inquiry has been successfully recorded.
+            </p>
+            <p className="text-xs text-[var(--text-muted)] max-w-md mx-auto mb-6">
+              Our team will review your message and respond to <span className="text-[var(--gold-primary)] font-semibold">{formData.email}</span> within 24 business hours.
             </p>
             <button
               type="button"
-              onClick={() => setSubmitted(false)}
+              onClick={() => {
+                setSubmitted(false);
+                setFormData({
+                  name: "",
+                  email: "",
+                  department: "General Inquiry",
+                  subject: "",
+                  message: "",
+                });
+              }}
               className="px-5 py-2.5 rounded-xl border border-[var(--border-subtle)] text-xs font-mono uppercase text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
             >
               Send Another Message
@@ -150,6 +165,24 @@ function ContactForm() {
             onSubmit={handleSubmit}
             className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 shadow-xl space-y-6"
           >
+            {errorMessage && (
+              <div className="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-xs text-red-300 flex items-start gap-3">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" />
+                <div className="flex-1 space-y-1">
+                  <p className="font-semibold text-red-200">Unable to dispatch email</p>
+                  <p className="text-red-300/80">{errorMessage}</p>
+                  <p className="text-[11px] text-[var(--text-muted)] pt-1">
+                    Direct alternative:{" "}
+                    <a
+                      href="mailto:mail@vicinix.co.in"
+                      className="text-[var(--gold-primary)] underline hover:text-[var(--gold-hover)]"
+                    >
+                      mail@vicinix.co.in
+                    </a>
+                  </p>
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
@@ -190,6 +223,7 @@ function ContactForm() {
                 className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
               >
                 <option value="General Inquiry">General Business Inquiry</option>
+                <option value="Custom Software">Custom Software Engineering & Bespoke Apps</option>
                 <option value="Product: vicinix-guard">Vicinix Guard (Security Platform)</option>
                 <option value="Product: vicinix-events">Vicinix Events (Access Control)</option>
                 <option value="Product: vicinix-invoice">Vicinix Invoice (Early Access)</option>

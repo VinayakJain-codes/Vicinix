@@ -6,14 +6,13 @@ import {
   Sparkles,
   ArrowRight,
   CheckCircle2,
-  Clock,
-  Layers,
   Send,
-  Calendar,
   Lock,
+  AlertCircle,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
+import { sendEnquiryEmail } from "@/lib/emailjs";
 
 export default function EnquirePage() {
   const [formData, setFormData] = useState({
@@ -30,6 +29,7 @@ export default function EnquirePage() {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const projectTypes = [
     "SaaS Platform",
@@ -54,14 +54,22 @@ export default function EnquirePage() {
     "Flexible discovery phase",
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate robust client-side dispatch
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage(null);
+
+    const result = await sendEnquiryEmail(formData);
+    setIsSubmitting(false);
+
+    if (result.success) {
       setSubmitted(true);
-    }, 700);
+    } else {
+      setErrorMessage(
+        result.error ||
+          "Failed to transmit specification. Please retry or email directly to mail@vicinix.co.in."
+      );
+    }
   };
 
   return (
@@ -75,11 +83,11 @@ export default function EnquirePage() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)] bg-[var(--badge-bg)] border border-[var(--border-subtle)] mb-4">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Bespoke Engineering Commission</span>
+              <span>Bespoke Custom Software Commission</span>
             </div>
 
             <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4">
-              Enquire for Personal Software
+              Enquire for Custom Software
             </h1>
 
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
@@ -94,16 +102,32 @@ export default function EnquirePage() {
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--text-primary)] mb-2">
-                Engineering Specification Received
+                Custom Software Specification Recorded
               </h2>
-              <p className="text-sm text-[var(--text-muted)] max-w-lg mx-auto mb-8 leading-relaxed">
-                Thank you, <span className="font-semibold text-[var(--text-primary)]">{formData.fullName}</span>. Our engineering team reviews project scopes within 24 hours. We will send an initial feasibility analysis and architecture assessment to <span className="font-semibold text-[var(--gold-primary)]">{formData.email}</span>.
+              <p className="text-sm text-[var(--text-muted)] max-w-lg mx-auto mb-3 leading-relaxed">
+                Thank you, <span className="font-semibold text-[var(--text-primary)]">{formData.fullName}</span>. Your custom software specification has been successfully recorded.
+              </p>
+              <p className="text-xs text-[var(--text-muted)] max-w-lg mx-auto mb-8 leading-relaxed">
+                Our engineering team reviews project scopes within 24 hours and will send an initial feasibility analysis and architecture assessment to <span className="font-semibold text-[var(--gold-primary)]">{formData.email}</span>.
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <button
                   type="button"
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      company: "",
+                      phone: "",
+                      projectType: "SaaS Platform",
+                      budgetRange: "₹2.5L – ₹6L ($3,000 – $7,500)",
+                      timeline: "1–3 months",
+                      scopeDescription: "",
+                      specDocLink: "",
+                    });
+                  }}
                   className="px-6 py-2.5 rounded-xl border border-[var(--border-subtle)] text-xs font-mono uppercase text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--gold-primary)] transition-all cursor-pointer"
                 >
                   Submit Another Project
@@ -123,6 +147,25 @@ export default function EnquirePage() {
               onSubmit={handleSubmit}
               className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 shadow-2xl space-y-8"
             >
+              {errorMessage && (
+                <div className="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-xs text-red-300 flex items-start gap-3">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" />
+                  <div className="flex-1 space-y-1">
+                    <p className="font-semibold text-red-200">Unable to dispatch commission request</p>
+                    <p className="text-red-300/80">{errorMessage}</p>
+                    <p className="text-[11px] text-[var(--text-muted)] pt-1">
+                      You can also email your project brief directly to{" "}
+                      <a
+                        href="mailto:mail@vicinix.co.in"
+                        className="text-[var(--gold-primary)] underline hover:text-[var(--gold-hover)]"
+                      >
+                        mail@vicinix.co.in
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Section 1: Contact Details */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-[var(--border-subtle)]">
