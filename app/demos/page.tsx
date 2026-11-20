@@ -22,7 +22,7 @@ const demos = [
 
 const websites = [
   { name: "Vinayak", domain: "vinayak.vicinix.co.in", href: "https://vinayak.vicinix.co.in", description: "Explore Vinayak’s personal website." },
-  { name: "Enter Chaos", domain: "enterchaos.co.in", href: "https://enterchaos.co.in", description: "Explore the Enter Chaos website." },
+  { name: "Enter Chaos", domain: "enterchaos.vicinix.co.in", href: "https://enterchaos.vicinix.co.in", description: "Explore the Enter Chaos website." },
   { name: "Marketnera", domain: "marketnera.com", href: "https://marketnera.com", description: "Explore the Marketnera website." },
 ];
 
