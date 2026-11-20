@@ -1,3 +1,4 @@
+import ProductStatusBadge from "@/components/ProductStatusBadge";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -69,34 +70,6 @@ export default async function CategoryPage({ params }: PageProps) {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "delivered":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 shadow-sm font-semibold">
-            Delivered
-          </span>
-        );
-      case "in-progress":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10 shadow-sm font-semibold">
-            In Development
-          </span>
-        );
-      case "new":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full border border-[var(--border-highlight)] text-[var(--gold-primary)] bg-[var(--badge-bg)] shadow-sm font-semibold">
-            New Architecture
-          </span>
-        );
-      case "concept":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full border border-neutral-500/30 text-neutral-400 bg-neutral-500/10 shadow-sm font-semibold">
-            Concept
-          </span>
-        );
-    }
-  };
 
   return (
     <>
@@ -190,7 +163,7 @@ export default async function CategoryPage({ params }: PageProps) {
                       <span className="text-xs font-mono text-[var(--gold-primary)] tracking-wide">
                         {product.name} by Vicinix
                       </span>
-                      {getStatusBadge(product.status)}
+                      <ProductStatusBadge product={product} />
                     </div>
 
                     <h3 className="font-serif text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--gold-primary)] transition-colors">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -27,11 +27,23 @@ export default function EnquirePage() {
     specDocLink: "",
   });
 
+  useEffect(() => {
+    const goal = new URLSearchParams(window.location.search).get("goal");
+    const selections: Record<string, { projectType: string; scopeDescription: string }> = {
+      website: { projectType: "Business Website", scopeDescription: "I would like to build a website for my business. " },
+      automation: { projectType: "Internal Operations Tool", scopeDescription: "I would like to automate these business processes: " },
+      loyalty: { projectType: "Loyalty Pilot", scopeDescription: "I am interested in a Vicinix Loyalty pilot for my business. " },
+    };
+    if (goal && selections[goal]) setFormData(current => ({ ...current, ...selections[goal] }));
+  }, []);
+
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const projectTypes = [
+    "Business Website",
+    "Loyalty Pilot",
     "SaaS Platform",
     "Internal Operations Tool",
     "Mobile Application",
@@ -250,6 +262,7 @@ export default function EnquirePage() {
                       <button
                         type="button"
                         key={type}
+                        aria-pressed={formData.projectType === type}
                         onClick={() => setFormData({ ...formData, projectType: type })}
                         className={`p-3 rounded-xl text-xs font-medium text-left border transition-all cursor-pointer ${
                           formData.projectType === type

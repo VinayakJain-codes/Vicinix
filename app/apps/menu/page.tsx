@@ -21,6 +21,8 @@ export default function MenuHubPage() {
       <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300 pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
+          <p className="mb-6 rounded-xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-4 text-base leading-relaxed text-[var(--text-muted)]"><strong className="text-[var(--text-primary)]">Interactive demo.</strong> Explore sample data and workflows. This is not a live client deployment.</p>
+
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-8">
             <Link href="/" className="hover:text-[var(--gold-primary)] transition-colors">
@@ -46,8 +48,15 @@ export default function MenuHubPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
-              Vicinix Menu connects diners, chefs, and restaurant managers into a synchronized contactless workflow. Select an interface below to test the live system:
+              Vicinix Menu connects diners, chefs, and restaurant managers into a synchronized contactless workflow. Select an interface below to explore the sample workflows:
             </p>
+          </div>
+
+          <div className="mb-10 rounded-2xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-6">
+            <p className="mb-2 text-sm font-medium text-[var(--gold-primary)]">Planned addition · Vicinix Loyalty</p>
+            <h2 className="text-xl font-semibold">Turn repeat visits into rewards.</h2>
+            <p className="mt-3 leading-relaxed text-[var(--text-muted)]">Explore a concept for digital stamp cards and customer offers. The connection to Vicinix Menu is planned.</p>
+            <Link href="/products/vicinix-loyalty" className="mt-4 inline-flex min-h-11 items-center font-semibold text-[var(--gold-primary)] underline underline-offset-4">Try the Loyalty concept</Link>
           </div>
 
           {/* 3 Interactive Experience Cards */}

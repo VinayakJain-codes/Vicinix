@@ -42,11 +42,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Vicinix — High-Performance Software for Security, Finance & IT Logistics",
+    default: "Vicinix — Software, Marketing & Event Management",
     template: "%s | Vicinix",
   },
   description:
-    "Vicinix builds sovereign digital software across Security Operations, Modern Finance, and IT Enterprise Logistics. Explore our suite or commission custom software.",
+    "Vicinix builds business software and custom websites, and helps brands grow through social media, advertising, branding and event management. Explore our services.",
   keywords: [
     "Vicinix",
     "Vicinix Security",
@@ -60,6 +60,8 @@ export const metadata: Metadata = {
     "Vicinix ERP",
     "Enterprise Software India",
     "Custom Software Engineering",
+    "Digital Marketing Meerut",
+    "Event Management Meerut",
   ],
   authors: [{ name: "Vicinix Technologies", url: BASE_URL }],
   creator: "Vicinix",
@@ -80,9 +82,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE_URL,
     siteName: "Vicinix",
-    title: "Vicinix — High-Performance Software Suite",
+    title: "Vicinix — Software, Marketing & Event Management",
     description:
-      "A sovereign multi-product ecosystem powering security management, modern tax & invoicing, and enterprise logistics.",
+      "Business software, custom websites, social media, brand campaigns and event management. One team for your next step.",
     images: [
       {
         url: "/og-image.png",
@@ -94,9 +96,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vicinix — High-Performance Software Suite",
+    title: "Vicinix — Software, Marketing & Event Management",
     description:
-      "A sovereign multi-product ecosystem powering security management, modern tax & invoicing, and enterprise logistics.",
+      "Business software, custom websites, social media, brand campaigns and event management. One team for your next step.",
     images: ["/og-image.png"],
     creator: "@vicinix",
   },
@@ -116,6 +118,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       data-theme="light"
       suppressHydrationWarning
       className={`${cinzel.variable} ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}

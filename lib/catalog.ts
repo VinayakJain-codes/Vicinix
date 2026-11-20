@@ -1,4 +1,4 @@
-export type ProductStatus = "delivered" | "in-progress" | "new" | "concept";
+export type ProductStatus = "demo" | "live" | "in-progress" | "planned";
 
 export type CategoryId = "security" | "finance" | "it-solutions";
 
@@ -116,6 +116,7 @@ export const CATEGORIES: Record<CategoryId, CategoryItem> = {
       "vicinix-menu",
       "vicinix-erp",
       "vicinix-college-erp",
+      "vicinix-loyalty",
     ],
     seo: {
       title: "Vicinix IT Solutions — Event Entry, QR Menus & Cloud ERP",
@@ -133,8 +134,8 @@ export const PRODUCTS: ProductItem[] = [
     name: "Guard",
     fullName: "Vicinix Guard",
     category: "security",
-    status: "delivered",
-    statusLabel: "Delivered",
+    status: "demo",
+    statusLabel: "Demo on request",
     tagline: "Real-time security workforce & automated checkpoint dispatch platform",
     summary:
       "A comprehensive guard management system featuring GPS-geofenced patrols, QR checkpoint verification, instant incident escalation, and executive compliance reporting.",
@@ -332,8 +333,8 @@ export const PRODUCTS: ProductItem[] = [
     name: "Invoice",
     fullName: "Vicinix Invoice",
     category: "finance",
-    status: "delivered",
-    statusLabel: "Delivered / Live Studio",
+    status: "demo",
+    statusLabel: "Interactive demo",
     tagline: "Full-lifecycle invoicing, recurring subscription billing, and Razorpay-powered payment links",
     summary:
       "A fast, modern invoicing platform designed to create, schedule, send, and collect payments on branded invoices with embedded Razorpay checkout links and automated accounting hooks.",
@@ -450,11 +451,11 @@ export const PRODUCTS: ProductItem[] = [
     name: "Events",
     fullName: "Vicinix Events",
     category: "it-solutions",
-    status: "delivered",
-    statusLabel: "Delivered",
+    status: "live",
+    statusLabel: "Live client deployment",
     tagline: "High-throughput QR ticketing, gate pass verification, and event logistics",
     summary:
-      "A battle-tested access control and event entry platform capable of scanning thousands of attendee QR tickets per minute with sub-second gate validation and live occupancy metrics.",
+      "Event management software used in a live client engagement with approximately 800 tickets sold and 600 attendees, according to figures supplied by Vicinix. Request a demonstration of the ticketing and access workflows.",
     overview: [
       "Vicinix Events was designed to eliminate gate congestion and eradicate ticket counterfeiting. Built for corporate conferences, exhibitions, concerts, and VIP galas, the platform powers the entire attendee entry lifecycle.",
       "Event organizers can issue encrypted QR passes via email and WhatsApp. At turnstiles or entry gates, staff use the ultra-fast Vicinix Scanner app to validate passes in under 300 milliseconds, even in poor connectivity conditions.",
@@ -566,8 +567,8 @@ export const PRODUCTS: ProductItem[] = [
     name: "Menu",
     fullName: "Vicinix Menu",
     category: "it-solutions",
-    status: "delivered",
-    statusLabel: "Delivered / Live Suite",
+    status: "demo",
+    statusLabel: "Interactive demo",
     tagline: "Table QR digital menu, live kitchen order display, and contactless table checkout",
     summary:
       "An intelligent restaurant operating system enabling guests to scan table QR codes, browse rich visual menus, place customized orders directly to the kitchen, and pay seamlessly via Razorpay.",
@@ -684,8 +685,8 @@ export const PRODUCTS: ProductItem[] = [
     name: "ERP",
     fullName: "Vicinix ERP",
     category: "it-solutions",
-    status: "concept",
-    statusLabel: "Concept / Roadmap",
+    status: "planned",
+    statusLabel: "Planned",
     tagline: "Next-generation modular cloud ERP for inventory, multi-entity ledger, and operations",
     summary:
       "A sovereign, composable enterprise resource planning platform engineered to replace bloated legacy enterprise software with modern API-first modules.",
@@ -746,8 +747,8 @@ export const PRODUCTS: ProductItem[] = [
     name: "College & K–12 ERP",
     fullName: "Vicinix College & K–12 ERP",
     category: "it-solutions",
-    status: "concept",
-    statusLabel: "Concept / Roadmap",
+    status: "planned",
+    statusLabel: "Planned",
     tagline: "Unified campus operating system: admissions, fee reconciliation, and academic lifecycle",
     summary:
       "A purpose-engineered campus management platform unifying student enrollment, automated fee collection, examination grading, faculty scheduling, and parent communication.",
@@ -799,6 +800,40 @@ export const PRODUCTS: ProductItem[] = [
         "Modern school and university ERP. Automate student fees, academic grading, admissions, and parent communications.",
       keywords: ["school management ERP", "college management system", "campus operating system"],
     },
+  },
+  {
+    id: "vicinix-loyalty",
+    slug: "vicinix-loyalty",
+    name: "Loyalty",
+    fullName: "Vicinix Loyalty",
+    category: "it-solutions",
+    status: "planned",
+    statusLabel: "Planned · concept preview",
+    tagline: "Digital stamp cards, rewards and customer offers",
+    summary: "A planned loyalty product for restaurants, cafes and local businesses. Explore the stamp-card concept and discuss a programme for your customers.",
+    overview: [
+      "Vicinix Loyalty is planned to help local businesses reward repeat visits with a digital stamp card and clear, redeemable offers.",
+      "The interactive preview demonstrates earning stamps and redeeming a reward with sample data. A production release, staff access, customer accounts and integration with Vicinix Menu are not yet available.",
+    ],
+    features: [
+      { title: "Digital stamp cards", description: "Planned customer cards with visit-based stamps and a visible reward target.", iconName: "Smartphone" },
+      { title: "Rewards and redemption", description: "Planned reward rules and staff-controlled redemption for your business.", iconName: "CheckCheck" },
+      { title: "Customer offers", description: "Planned business-defined offers, with eligibility and expiry rules agreed during setup.", iconName: "Percent" },
+      { title: "Connect with your menu", description: "A proposed connection with Vicinix Menu; integration will be scoped and tested before release.", iconName: "QrCode" },
+    ],
+    specifications: [
+      { label: "Availability", value: "Planned product; concept preview only" },
+      { label: "Preview data", value: "Sample data in this browser tab; resets on refresh" },
+      { label: "Release date", value: "Not announced" },
+    ],
+    roadmap: [
+      { stage: "Concept preview", details: "Explore a sample stamp-card and reward journey.", completed: true },
+      { stage: "Pilot planning", details: "Agree reward rules and operational requirements with pilot businesses.", completed: false },
+      { stage: "Production platform", details: "Build customer accounts, authorised staff controls and durable reward records.", completed: false },
+      { stage: "Menu integration", details: "Validate an integration with Vicinix Menu during a pilot.", completed: false },
+    ],
+    cta: { primaryText: "Discuss a loyalty pilot", primaryHref: "/enquire?goal=loyalty", secondaryText: "Explore Vicinix Menu", secondaryHref: "/products/vicinix-menu" },
+    seo: { title: "Vicinix Loyalty — Digital Stamp Cards & Rewards (Planned)", description: "Explore the Vicinix Loyalty concept: digital stamp cards, rewards and customer offers for local businesses. Planned product; enquire about a pilot.", keywords: ["digital stamp cards", "restaurant loyalty programme", "cafe rewards", "Vicinix Loyalty"] },
   },
 ];
 

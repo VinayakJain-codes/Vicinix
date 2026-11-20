@@ -1,3 +1,6 @@
+import LoyaltyPreview from "@/components/LoyaltyPreview";
+import CaseStudies from "@/components/CaseStudies";
+import ProductStatusBadge from "@/components/ProductStatusBadge";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -65,6 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: product.seo.title,
+    alternates: { canonical: `/products/${product.slug}` },
     description: product.seo.description,
     keywords: product.seo.keywords,
     openGraph: {
@@ -120,37 +124,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   const category = CATEGORIES[product.category];
 
-  const getStatusBadge = (status: ProductItem["status"]) => {
-    switch (status) {
-      case "delivered":
-        return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase px-3 py-1 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Delivered / Live Production
-          </span>
-        );
-      case "in-progress":
-        return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase px-3 py-1 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            Active Development / Beta Q2 2026
-          </span>
-        );
-      case "new":
-        return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase px-3 py-1 rounded-full border border-[var(--border-highlight)] text-[var(--gold-primary)] bg-[var(--badge-bg)] shadow-sm">
-            <Sparkles className="w-3.5 h-3.5" />
-            New Architecture
-          </span>
-        );
-      case "concept":
-        return (
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase px-3 py-1 rounded-full border border-neutral-500/30 text-neutral-400 bg-neutral-500/10 shadow-sm">
-            Concept / Long-Term Roadmap
-          </span>
-        );
-    }
-  };
 
   return (
     <>
@@ -191,7 +164,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {product.name} by Vicinix
                 </span>
                 <span className="text-[var(--text-muted)]">·</span>
-                {getStatusBadge(product.status)}
+                <ProductStatusBadge product={product} />
               </div>
 
               <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold text-[var(--text-primary)] leading-tight mb-4 tracking-tight">
@@ -226,6 +199,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             </div>
           </div>
+
+          <p className="mb-8 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 text-base leading-relaxed text-[var(--text-muted)]">{product.status === "planned" ? "Planned product. Features describe the proposed scope; no production release date has been announced." : product.status === "live" ? "Used in a live client engagement. A demonstration is available on request; client access is private." : product.status === "in-progress" ? "In development. Availability and release timing will be confirmed before any engagement." : product.id === "vicinix-guard" ? "A product demonstration is available on request. A live client deployment has not been confirmed for publication." : "Interactive browser demo with sample data. This is not a live client deployment."}</p>
+          {product.id === "vicinix-loyalty" && <LoyaltyPreview />}
+          {product.id === "vicinix-events" && <CaseStudies />}
+          {product.id === "vicinix-events" && <p className="mb-10 text-base text-[var(--text-muted)]">Need event promotion or coordination too? <Link href="/social-media#services" className="font-semibold text-[var(--gold-primary)] underline underline-offset-4">Explore Marketing &amp; Events</Link></p>}
 
           {/* In-Depth Overview & Architecture */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-start">
@@ -270,7 +248,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 Capabilities
               </span>
               <h3 className="font-serif text-2xl sm:text-4xl font-bold text-[var(--text-primary)] mt-1 tracking-tight">
-                Engineered for Absolute Reliability
+                {product.status === "planned" ? "Proposed capabilities" : "Explore the product capabilities"}
               </h3>
             </div>
 
@@ -402,7 +380,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                           </span>
                         ) : (
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                            In Progress
+                            {product.status === "planned" ? "Planned" : "In progress"}
                           </span>
                         )}
                       </div>

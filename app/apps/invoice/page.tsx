@@ -127,6 +127,8 @@ export default function InvoiceDashboard() {
       <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300 pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
+          <p className="mb-6 rounded-xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-4 text-base leading-relaxed text-[var(--text-muted)]"><strong className="text-[var(--text-primary)]">Interactive demo.</strong> Explore sample data and workflows. This is not a live client deployment.</p>
+
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] mb-6">
             <Link href="/" className="hover:text-[var(--gold-primary)] transition-colors">
@@ -145,7 +147,7 @@ export default function InvoiceDashboard() {
             <div>
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>[INVOICE] BY VICINIX · PRODUCTION ENGINE</span>
+                <span>[INVOICE] BY VICINIX · INTERACTIVE DEMO</span>
               </div>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
                 Invoicing & Receivables Studio

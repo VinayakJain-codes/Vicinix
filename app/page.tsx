@@ -17,10 +17,15 @@ import {
   ChefHat,
   MonitorCheck,
   Zap,
+  Megaphone,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { CATEGORIES, PRODUCTS } from "@/lib/catalog";
+import ChooseGoal from "@/components/ChooseGoal";
+import CaseStudies from "@/components/CaseStudies";
+import ProductStatusBadge from "@/components/ProductStatusBadge";
+import HomeTeaser from "@/components/SocialMarketing/HomeTeaser";
 
 export default function HomePage() {
   const [activeFlagshipTab, setActiveFlagshipTab] = useState<"guard" | "events">("guard");
@@ -55,34 +60,32 @@ export default function HomePage() {
 
             {/* Main Headline */}
             <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[var(--text-primary)] leading-[1.08] mb-6">
-              Engineered for <br className="hidden sm:inline" />
-              <span className="text-gold-gradient font-serif">Operational Absolute.</span>
+              Build your business.<br className="hidden sm:inline" />
+              <span className="text-gold-gradient font-serif">Grow your presence.</span>
             </h1>
 
             {/* Sub-headline */}
             <p className="max-w-3xl mx-auto text-base sm:text-xl text-[var(--text-muted)] leading-relaxed mb-10 font-normal">
-              A sovereign technology house building high-precision software across{" "}
-              <span className="text-[var(--text-primary)] font-medium">Security Operations</span>,{" "}
-              <span className="text-[var(--text-primary)] font-medium">Modern Finance</span>, and{" "}
-              <span className="text-[var(--text-primary)] font-medium">Enterprise IT Logistics</span>.
+              Software that powers your operations. Marketing that gets you seen.
+              From business platforms and custom websites to social media, brand campaigns and event management — built around your next step.
             </p>
 
             {/* Primary Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="#categories"
+                href="#software"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-[var(--gold-primary)] text-black font-semibold text-xs uppercase tracking-wider hover:bg-[var(--gold-hover)] transition-all duration-300 apple-ease shadow-lg hover:shadow-xl hover:scale-[1.02]"
               >
-                <span>Explore Suite</span>
+                <span>Explore Software</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <Link
-                href="/enquire"
+                href="/social-media"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl liquid-glass text-[var(--text-primary)] font-semibold text-xs uppercase tracking-wider hover:border-[var(--gold-primary)] transition-all duration-300 apple-ease"
               >
                 <Sparkles className="w-4 h-4 text-[var(--gold-primary)]" />
-                <span>Commission Custom Software</span>
+                <span>Marketing &amp; Events</span>
               </Link>
             </div>
 
@@ -93,16 +96,16 @@ export default function HomePage() {
                 <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Industry Verticals</div>
               </div>
               <div>
-                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">7</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Specialized Platforms</div>
+                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">{PRODUCTS.length}</div>
+                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Products & Concepts</div>
               </div>
               <div>
-                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">&lt; 300ms</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Verification Latency</div>
+                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">{PRODUCTS.filter(product => product.status === "demo").length}</div>
+                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Demo Products</div>
               </div>
               <div>
-                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">100%</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Sovereign Architecture</div>
+                <div className="font-serif text-2xl sm:text-3xl font-bold text-[var(--gold-primary)]">{PRODUCTS.filter(product => product.status === "planned").length}</div>
+                <div className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] mt-1">Planned Products</div>
               </div>
             </div>
 
@@ -112,6 +115,16 @@ export default function HomePage() {
         {/* =========================================================================
             CATEGORIES OVERVIEW (Liquid Glass 3 Pillars)
             ========================================================================= */}
+        <ChooseGoal />
+
+        <section id="software" className="scroll-mt-24 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <p className="mb-3 text-sm font-medium uppercase tracking-widest text-[var(--gold-primary)]">Software &amp; Technology</p>
+            <h2 className="font-serif text-3xl font-bold sm:text-4xl">The systems behind your business.</h2>
+            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">Explore our software suite and custom development services across security, finance and business operations.</p>
+            <p className="mt-5 max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]"><strong>Live client deployment:</strong> used in a client engagement. <strong>Demo:</strong> sample workflows or a demonstration on request. <strong>Planned:</strong> proposed scope, with availability to be confirmed.</p>
+          </div>
+        </section>
         <section id="categories" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)] mb-3">
@@ -149,9 +162,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix Guard</span>
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                      Delivered
-                    </span>
+                    <ProductStatusBadge product={guardProduct} />
                   </div>
                 </div>
               </div>
@@ -187,14 +198,12 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix Invoice</span>
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                      Delivered
-                    </span>
+                    <ProductStatusBadge product={invoiceProduct} />
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix Tax</span>
                     <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
-                      In Dev
+                      In development
                     </span>
                   </div>
                 </div>
@@ -231,20 +240,16 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix Events</span>
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                      Delivered
-                    </span>
+                    <ProductStatusBadge product={eventsProduct} />
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix Menu</span>
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                      Delivered
-                    </span>
+                    <ProductStatusBadge product={menuProduct} />
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)]">
                     <span className="text-sm font-medium text-[var(--text-primary)]">Vicinix ERP Suite</span>
                     <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-neutral-500/30 text-neutral-400 bg-neutral-500/10">
-                      Concept
+                      Planned
                     </span>
                   </div>
                 </div>
@@ -269,10 +274,10 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)]">
-                Production-Ready Flagships
+                Product showcase
               </span>
               <h3 className="font-serif text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mt-2 tracking-tight">
-                Delivered & Operating in the Field.
+                Explore the software and its availability.
               </h3>
             </div>
 
@@ -307,10 +312,7 @@ export default function HomePage() {
           {activeFlagshipTab === "guard" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl liquid-glass-elevated p-8 sm:p-12 shadow-2xl animate-in fade-in duration-500">
               <div className="lg:col-span-5 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span>DELIVERED & LIVE</span>
-                </div>
+                <ProductStatusBadge product={guardProduct} />
                 <h4 className="font-serif text-3xl font-bold text-[var(--text-primary)]">
                   Vicinix Guard
                 </h4>
@@ -356,12 +358,12 @@ export default function HomePage() {
                       <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
                       <div className="w-3 h-3 rounded-full bg-green-500/60" />
                       <span className="ml-2 text-xs font-mono text-[var(--text-muted)]">
-                        guard.vicinix.co.in/live-patrols
+                        Sample product screen
                       </span>
                     </div>
                     <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      Live Patrol Feed (Active)
+                      Illustrative patrol interface
                     </span>
                   </div>
 
@@ -383,7 +385,7 @@ export default function HomePage() {
                   <div className="p-4 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] space-y-2">
                     <div className="text-xs font-mono text-[var(--text-muted)] flex items-center justify-between">
                       <span>RECENT PATROL TELEMETRY</span>
-                      <span>SYNCED 2s AGO</span>
+                      <span>SAMPLE DATA</span>
                     </div>
                     <div className="space-y-2 font-mono text-xs">
                       <div className="flex items-center justify-between text-emerald-400 p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
@@ -405,10 +407,7 @@ export default function HomePage() {
           {activeFlagshipTab === "events" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center rounded-3xl liquid-glass-elevated p-8 sm:p-12 shadow-2xl animate-in fade-in duration-500">
               <div className="lg:col-span-5 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span>DELIVERED & LIVE</span>
-                </div>
+                <ProductStatusBadge product={eventsProduct} />
                 <h4 className="font-serif text-3xl font-bold text-[var(--text-primary)]">
                   Vicinix Events
                 </h4>
@@ -454,12 +453,12 @@ export default function HomePage() {
                       <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
                       <div className="w-3 h-3 rounded-full bg-green-500/60" />
                       <span className="ml-2 text-xs font-mono text-[var(--text-muted)]">
-                        events.vicinix.co.in/gate-telemetry
+                        Sample event screen
                       </span>
                     </div>
                     <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      Gate Turnstiles (Active)
+                      Illustrative event interface
                     </span>
                   </div>
 
@@ -507,13 +506,13 @@ export default function HomePage() {
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[var(--border-subtle)] relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)]">
-              Live Operating Suite
+              Interactive demos
             </span>
             <h3 className="font-serif text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mt-2 tracking-tight">
-              Interactive Applications in Production.
+              Try the product experience.
             </h3>
             <p className="mt-3 text-sm sm:text-base text-[var(--text-muted)]">
-              Two new platforms designed and shipped to transform enterprise invoicing and digital restaurant logistics.
+              Explore sample invoicing and restaurant workflows. These browser demos do not represent a live client deployment.
             </p>
           </div>
 
@@ -526,9 +525,7 @@ export default function HomePage() {
                   <div className="p-3 rounded-2xl bg-[var(--badge-bg)] text-[var(--gold-primary)] border border-[var(--border-subtle)] group-hover:scale-110 transition-transform duration-300 apple-ease">
                     <CreditCard className="w-6 h-6" />
                   </div>
-                  <span className="text-[10px] font-mono uppercase px-3 py-1 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-bold">
-                    Delivered / Live Studio
-                  </span>
+                  <ProductStatusBadge product={invoiceProduct} />
                 </div>
                 <h4 className="font-serif text-2xl font-bold text-[var(--text-primary)] mb-2">
                   Vicinix Invoice
@@ -564,7 +561,7 @@ export default function HomePage() {
                   href="/apps/invoice"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--gold-primary)] text-black font-semibold text-xs uppercase tracking-wider hover:bg-[var(--gold-hover)] transition-all duration-300 apple-ease shadow-md hover:scale-[1.02]"
                 >
-                  <span>Launch Invoicing Studio</span>
+                  <span>Try Invoice Demo</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
                 <Link
@@ -583,9 +580,7 @@ export default function HomePage() {
                   <div className="p-3 rounded-2xl bg-[var(--badge-bg)] text-[var(--gold-primary)] border border-[var(--border-subtle)] group-hover:scale-110 transition-transform duration-300 apple-ease">
                     <ChefHat className="w-6 h-6" />
                   </div>
-                  <span className="text-[10px] font-mono uppercase px-3 py-1 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-bold">
-                    Delivered / Live Suite
-                  </span>
+                  <ProductStatusBadge product={menuProduct} />
                 </div>
                 <h4 className="font-serif text-2xl font-bold text-[var(--text-primary)] mb-2">
                   Vicinix Menu
@@ -621,7 +616,7 @@ export default function HomePage() {
                   href="/apps/menu"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--gold-primary)] text-black font-semibold text-xs uppercase tracking-wider hover:bg-[var(--gold-hover)] transition-all duration-300 apple-ease shadow-md hover:scale-[1.02]"
                 >
-                  <span>Launch Restaurant Suite</span>
+                  <span>Try Menu Demo</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
                 <Link
@@ -635,6 +630,17 @@ export default function HomePage() {
 
           </div>
         </section>
+
+        <section className="relative z-10 mx-auto max-w-7xl px-5 py-16 sm:px-8" aria-labelledby="loyalty-title">
+          <div className="rounded-3xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-7 sm:p-12">
+            <ProductStatusBadge product={PRODUCTS.find(product => product.id === "vicinix-loyalty")!} />
+            <h2 id="loyalty-title" className="mt-5 font-serif text-3xl font-bold sm:text-4xl">Give customers a reason to come back.</h2>
+            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">Vicinix Loyalty: digital stamp cards, rewards and customer offers for cafes, restaurants and local businesses. Explore the concept while we plan the product.</p>
+            <Link href="/products/vicinix-loyalty" className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-[var(--text-primary)] px-6 py-3 font-semibold text-[var(--bg-base)]">Explore Loyalty concept</Link>
+          </div>
+        </section>
+        <CaseStudies />
+        <HomeTeaser />
 
       </main>
 

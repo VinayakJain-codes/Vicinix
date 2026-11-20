@@ -9,6 +9,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Core static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
+      url: `${BASE_URL}/social-media`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: BASE_URL,
       lastModified: now,
       changeFrequency: "weekly",
@@ -59,7 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${BASE_URL}/products/${prod.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: prod.status === "delivered" ? 0.9 : 0.85,
+    priority: prod.status === "live" ? 0.9 : 0.85,
   }));
 
   return [...staticRoutes, ...categoryRoutes, ...productRoutes];

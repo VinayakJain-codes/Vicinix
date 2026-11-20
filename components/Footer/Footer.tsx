@@ -125,6 +125,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/social-media" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">Marketing &amp; Events</Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">
                   Contact Support & Sales
                 </Link>

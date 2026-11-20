@@ -45,19 +45,18 @@ export function ProductJsonLd({
     "@type": "SoftwareApplication",
     name: `${name} by Vicinix`,
     applicationCategory: category,
-    operatingSystem: "Web, Cloud, Android, iOS",
+    operatingSystem: "Web",
     description: description,
     url: url,
     brand: {
       "@type": "Brand",
       name: "Vicinix",
     },
-    offers: {
+    ...(price ? { offers: {
       "@type": "Offer",
       price: price ? price.replace(/[^0-9]/g, "") || "0" : "0",
       priceCurrency: "INR",
-      availability: "https://schema.org/InStock",
-    },
+    } } : {}),
   };
 
   return (

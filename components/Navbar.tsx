@@ -1,5 +1,7 @@
 "use client";
 
+import ProductStatusBadge from "@/components/ProductStatusBadge";
+
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -46,34 +48,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getStatusBadge = (status: ProductItem["status"]) => {
-    switch (status) {
-      case "delivered":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full border border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-            Delivered
-          </span>
-        );
-      case "in-progress":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
-            In Dev
-          </span>
-        );
-      case "new":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full border border-[var(--border-highlight)] text-[var(--gold-primary)] bg-[var(--badge-bg)]">
-            New
-          </span>
-        );
-      case "concept":
-        return (
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full border border-neutral-500/30 text-neutral-400 bg-neutral-500/10">
-            Concept
-          </span>
-        );
-    }
-  };
 
   return (
     <header
@@ -179,7 +153,7 @@ export default function Navbar() {
                       The Vicinix Suite
                     </span>
                     <span className="text-[11px] font-mono text-[var(--gold-primary)]">
-                      7 Products
+                      {PRODUCTS.length} Products
                     </span>
                   </div>
                   <div className="max-h-[380px] overflow-y-auto space-y-1 pr-1">
@@ -198,7 +172,7 @@ export default function Navbar() {
                           </div>
                         </div>
                         <div className="flex-shrink-0 ml-3">
-                          {getStatusBadge(prod.status)}
+                          <ProductStatusBadge product={prod} />
                         </div>
                       </Link>
                     ))}
@@ -208,6 +182,9 @@ export default function Navbar() {
             </div>
 
             {/* Direct Links */}
+            <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${pathname === "/social-media" ? "text-[var(--gold-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}>
+              Marketing &amp; Events
+            </Link>
             <Link
               href="/about"
               className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
@@ -314,13 +291,16 @@ export default function Navbar() {
                       {prod.tagline}
                     </div>
                   </div>
-                  {getStatusBadge(prod.status)}
+                  <ProductStatusBadge product={prod} />
                 </Link>
               ))}
             </div>
           </div>
 
           <div className="border-t border-[var(--border-subtle)] pt-4 space-y-2">
+            <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className="block py-2 text-sm font-medium text-[var(--gold-primary)]" onClick={() => setMobileMenuOpen(false)}>
+              Marketing &amp; Events
+            </Link>
             <Link
               href="/about"
               className="block py-2 text-sm font-medium text-[var(--text-primary)]"
