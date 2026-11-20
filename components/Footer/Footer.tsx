@@ -119,6 +119,7 @@ export default function Footer() {
                   About Vicinix
                 </Link>
               </li>
+              <li><Link href="/demos" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">Demos &amp; Websites</Link></li>
               <li>
                 <Link href="/enquire" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">
                   Personal Software

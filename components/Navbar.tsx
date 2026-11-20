@@ -69,7 +69,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden xl:flex items-center gap-1 xl:gap-2">
             
             {/* Solutions Dropdown */}
             <div className="relative" ref={solutionsRef}>
@@ -182,6 +182,7 @@ export default function Navbar() {
             </div>
 
             {/* Direct Links */}
+            <Link href="/demos" aria-current={pathname === "/demos" ? "page" : undefined} className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${pathname === "/demos" ? "text-[var(--gold-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}>Demos</Link>
             <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${pathname === "/social-media" ? "text-[var(--gold-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}>
               Marketing &amp; Events
             </Link>
@@ -221,7 +222,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Action Cluster */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden xl:flex items-center gap-4">
             <ThemeToggle />
             <Link
               href="/enquire"
@@ -232,7 +233,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-3 lg:hidden">
+          <div className="flex items-center gap-3 xl:hidden">
             <ThemeToggle />
             <button
               type="button"
@@ -249,7 +250,7 @@ export default function Navbar() {
 
       {/* Mobile Flyout Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[65px] bottom-0 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] p-6 overflow-y-auto space-y-6 animate-in slide-in-from-top-4 duration-300">
+        <div className="xl:hidden fixed inset-x-0 top-[65px] bottom-0 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] p-6 overflow-y-auto space-y-6 animate-in slide-in-from-top-4 duration-300">
           <div>
             <div className="text-xs font-mono uppercase text-[var(--gold-primary)] mb-3 tracking-wider">
               Solutions
@@ -298,6 +299,7 @@ export default function Navbar() {
           </div>
 
           <div className="border-t border-[var(--border-subtle)] pt-4 space-y-2">
+            <Link href="/demos" aria-current={pathname === "/demos" ? "page" : undefined} onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[var(--text-primary)]">Demos &amp; Websites</Link>
             <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className="block py-2 text-sm font-medium text-[var(--gold-primary)]" onClick={() => setMobileMenuOpen(false)}>
               Marketing &amp; Events
             </Link>

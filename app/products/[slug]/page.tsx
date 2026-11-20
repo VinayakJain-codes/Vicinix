@@ -1,4 +1,5 @@
 import LoyaltyPreview from "@/components/LoyaltyPreview";
+import EventScreenshots from "@/components/EventScreenshots";
 import CaseStudies from "@/components/CaseStudies";
 import ProductStatusBadge from "@/components/ProductStatusBadge";
 import { notFound } from "next/navigation";
@@ -202,6 +203,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           <p className="mb-8 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 text-base leading-relaxed text-[var(--text-muted)]">{product.status === "planned" ? "Planned product. Features describe the proposed scope; no production release date has been announced." : product.status === "live" ? "Used in a live client engagement. A demonstration is available on request; client access is private." : product.status === "in-progress" ? "In development. Availability and release timing will be confirmed before any engagement." : product.id === "vicinix-guard" ? "A product demonstration is available on request. A live client deployment has not been confirmed for publication." : "Interactive browser demo with sample data. This is not a live client deployment."}</p>
           {product.id === "vicinix-loyalty" && <LoyaltyPreview />}
+          {product.id === "vicinix-events" && <EventScreenshots />}
           {product.id === "vicinix-events" && <CaseStudies />}
           {product.id === "vicinix-events" && <p className="mb-10 text-base text-[var(--text-muted)]">Need event promotion or coordination too? <Link href="/social-media#services" className="font-semibold text-[var(--gold-primary)] underline underline-offset-4">Explore Marketing &amp; Events</Link></p>}
 
