@@ -23,10 +23,38 @@ export interface EnquiryEmailPayload {
   specDocLink?: string;
 }
 
-export interface EmailSendResult {
-  success: boolean;
-  simulated?: boolean;
-  error?: string;
+export type EmailSendResult =
+  | { success: true }
+  | { success: false; error: string };
+
+const deliveryError = "We could not send your message. Your details are still here; please try again or email mail@vicinix.co.in.";
+
+async function sendTemplate(
+  templateId: string,
+  templateParams: Record<string, unknown>,
+): Promise<EmailSendResult> {
+  const { serviceId, publicKey } = getEmailJSConfig();
+  if (!serviceId || !publicKey || !templateId) {
+    return { success: false, error: "This form is temporarily unavailable. Your message has not been sent. Please email mail@vicinix.co.in." };
+  }
+
+  try {
+    const response = await emailjs.send(serviceId, templateId, templateParams, {
+      publicKey,
+      limitRate: { id: "vicinix-enquiries", throttle: 60_000 },
+    });
+    return response.status === 200
+      ? { success: true }
+      : { success: false, error: deliveryError };
+  } catch (error: unknown) {
+    const status = typeof error === "object" && error !== null && "status" in error ? error.status : null;
+    return {
+      success: false,
+      error: status === 429
+        ? "Please wait a minute before sending another message. Your details are still here."
+        : deliveryError,
+    };
+  }
 }
 
 export function getEmailJSConfig() {
@@ -57,6 +85,9 @@ export function getEmailJSConfig() {
 export async function sendContactEmail(
   data: ContactEmailPayload
 ): Promise<EmailSendResult> {
+  if ([data.name, data.email, data.department, data.subject, data.message].some(value => !value.trim())) {
+    return { success: false, error: "Please complete all required fields before sending." };
+  }
   const config = getEmailJSConfig();
   const templateId = config.contactTemplateId;
   const timestamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
@@ -104,47 +135,7 @@ export async function sendContactEmail(
     submitted_at: timestamp,
   };
 
-  // If EmailJS credentials are not yet configured in environment variables,
-  // simulate transmission gracefully to avoid crashing during local preview/dev.
-  if (!config.serviceId || !config.publicKey || !templateId) {
-    console.warn(
-      `[EmailJS] Missing environment variables for live sending.\n` +
-      `Target recipient: ${VICINIX_TARGET_EMAIL}\n` +
-      `To enable live delivery, define NEXT_PUBLIC_EMAILJS_SERVICE_ID, NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, and NEXT_PUBLIC_EMAILJS_PUBLIC_KEY in your .env.local file.`
-    );
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return { success: true, simulated: true };
-  }
-
-  try {
-    const response = await emailjs.send(
-      config.serviceId,
-      templateId,
-      templateParams,
-      { publicKey: config.publicKey }
-    );
-
-    if (response.status === 200) {
-      return { success: true, simulated: false };
-    } else {
-      return {
-        success: false,
-        error: `EmailJS responded with status ${response.status}: ${response.text}`,
-      };
-    }
-  } catch (err: unknown) {
-    console.error("[EmailJS] Failed to dispatch contact email:", err);
-    let errorMessage = "Failed to deliver message via EmailJS.";
-    if (typeof err === "object" && err !== null && "text" in err) {
-      errorMessage = String((err as { text: unknown }).text);
-    } else if (err instanceof Error) {
-      errorMessage = err.message;
-    }
-    return {
-      success: false,
-      error: errorMessage,
-    };
-  }
+  return sendTemplate(templateId, templateParams);
 }
 
 /**
@@ -153,6 +144,9 @@ export async function sendContactEmail(
 export async function sendEnquiryEmail(
   data: EnquiryEmailPayload
 ): Promise<EmailSendResult> {
+  if ([data.fullName, data.email, data.projectType, data.budgetRange, data.timeline, data.scopeDescription].some(value => !value.trim())) {
+    return { success: false, error: "Please complete all required fields before sending." };
+  }
   const config = getEmailJSConfig();
   const templateId = config.enquireTemplateId;
   const timestamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
@@ -220,45 +214,7 @@ export async function sendEnquiryEmail(
     submitted_at: timestamp,
   };
 
-  if (!config.serviceId || !config.publicKey || !templateId) {
-    console.warn(
-      `[EmailJS] Missing environment variables for live sending.\n` +
-      `Target recipient: ${VICINIX_TARGET_EMAIL}\n` +
-      `To enable live delivery, define NEXT_PUBLIC_EMAILJS_SERVICE_ID, NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, and NEXT_PUBLIC_EMAILJS_PUBLIC_KEY in your .env.local file.`
-    );
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return { success: true, simulated: true };
-  }
-
-  try {
-    const response = await emailjs.send(
-      config.serviceId,
-      templateId,
-      templateParams,
-      { publicKey: config.publicKey }
-    );
-
-    if (response.status === 200) {
-      return { success: true, simulated: false };
-    } else {
-      return {
-        success: false,
-        error: `EmailJS responded with status ${response.status}: ${response.text}`,
-      };
-    }
-  } catch (err: unknown) {
-    console.error("[EmailJS] Failed to dispatch enquiry email:", err);
-    let errorMessage = "Failed to deliver enquiry via EmailJS.";
-    if (typeof err === "object" && err !== null && "text" in err) {
-      errorMessage = String((err as { text: unknown }).text);
-    } else if (err instanceof Error) {
-      errorMessage = err.message;
-    }
-    return {
-      success: false,
-      error: errorMessage,
-    };
-  }
+  return sendTemplate(templateId, templateParams);
 }
 
 /**

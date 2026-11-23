@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -40,6 +40,12 @@ export default function EnquirePage() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const sending = useRef(false);
+  const feedback = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitted || errorMessage) feedback.current?.focus();
+  }, [submitted, errorMessage]);
 
   const projectTypes = [
     "Business Website",
@@ -68,19 +74,23 @@ export default function EnquirePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (sending.current) return;
+    sending.current = true;
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const result = await sendEnquiryEmail(formData);
-    setIsSubmitting(false);
-
-    if (result.success) {
-      setSubmitted(true);
-    } else {
-      setErrorMessage(
-        result.error ||
-          "Failed to transmit specification. Please retry or email directly to mail@vicinix.co.in."
-      );
+    try {
+      const result = await sendEnquiryEmail(formData);
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(result.error);
+      }
+    } catch {
+      setErrorMessage("We could not send your message. Your details are still here; please try again or email mail@vicinix.co.in.");
+    } finally {
+      sending.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -95,7 +105,7 @@ export default function EnquirePage() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest text-[var(--gold-primary)] bg-[var(--badge-bg)] border border-[var(--border-subtle)] mb-4">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Bespoke Custom Software Commission</span>
+              <span>Custom Software Enquiry</span>
             </div>
 
             <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4">
@@ -109,15 +119,15 @@ export default function EnquirePage() {
 
           {submitted ? (
             /* Success State */
-            <div className="rounded-3xl border border-[var(--border-highlight)] bg-[var(--bg-surface)] p-8 sm:p-12 text-center shadow-2xl animate-in zoom-in-95 duration-400">
+            <div ref={feedback} tabIndex={-1} role="status" className="scroll-mt-28 rounded-3xl border border-[var(--border-highlight)] bg-[var(--bg-surface)] p-8 sm:p-12 text-center shadow-2xl animate-in zoom-in-95 duration-400">
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--text-primary)] mb-2">
-                Custom Software Specification Recorded
+                Project request sent
               </h2>
               <p className="text-sm text-[var(--text-muted)] max-w-lg mx-auto mb-3 leading-relaxed">
-                Thank you, <span className="font-semibold text-[var(--text-primary)]">{formData.fullName}</span>. Your custom software specification has been successfully recorded.
+                Thank you, <span className="font-semibold text-[var(--text-primary)]">{formData.fullName}</span>. Your project request has been submitted for email delivery.
               </p>
               <p className="text-xs text-[var(--text-muted)] max-w-lg mx-auto mb-8 leading-relaxed">
                 Our engineering team reviews project scopes within 24 hours and will send an initial feasibility analysis and architecture assessment to <span className="font-semibold text-[var(--gold-primary)]">{formData.email}</span>.
@@ -157,14 +167,15 @@ export default function EnquirePage() {
             /* Request Form */
             <form
               onSubmit={handleSubmit}
+              aria-busy={isSubmitting}
               className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 shadow-2xl space-y-8"
             >
               {errorMessage && (
-                <div className="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-xs text-red-300 flex items-start gap-3">
+                <div ref={feedback} tabIndex={-1} role="alert" className="scroll-mt-28 p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-sm text-[var(--text-primary)] flex items-start gap-3">
                   <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" />
                   <div className="flex-1 space-y-1">
-                    <p className="font-semibold text-red-200">Unable to dispatch commission request</p>
-                    <p className="text-red-300/80">{errorMessage}</p>
+                    <p className="font-semibold text-[var(--text-primary)]">Unable to dispatch commission request</p>
+                    <p className="text-[var(--text-primary)]">{errorMessage}</p>
                     <p className="text-[11px] text-[var(--text-muted)] pt-1">
                       You can also email your project brief directly to{" "}
                       <a
@@ -189,56 +200,56 @@ export default function EnquirePage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-fullName" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Full Name *
                     </label>
-                    <input
+                    <input id="field-fullName" name="fullName" autoComplete="name"
                       type="text"
                       required
                       placeholder="e.g. Vinayak Jain"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-email" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Work Email *
                     </label>
-                    <input
+                    <input id="field-email" name="email" autoComplete="email"
                       type="email"
                       required
                       placeholder="e.g. founder@enterprise.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-company" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Company / Organization
                     </label>
-                    <input
+                    <input id="field-company" name="company" autoComplete="organization"
                       type="text"
                       placeholder="e.g. Apex Logistics Ltd"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-phone" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Phone / WhatsApp (Optional)
                     </label>
-                    <input
+                    <input id="field-phone" name="phone" autoComplete="tel"
                       type="tel"
                       placeholder="+91 98765 43210"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -254,10 +265,10 @@ export default function EnquirePage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-[var(--text-muted)] mb-2">
+                  <p id="project-type-label" className="block text-xs font-mono text-[var(--text-muted)] mb-2">
                     Primary Software Type *
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  </p>
+                  <div role="group" aria-labelledby="project-type-label" className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {projectTypes.map((type) => (
                       <button
                         type="button"
@@ -278,13 +289,13 @@ export default function EnquirePage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-budgetRange" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Budget Range *
                     </label>
-                    <select
+                    <select id="field-budgetRange" name="budgetRange"
                       value={formData.budgetRange}
                       onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     >
                       {budgetTiers.map((tier) => (
                         <option key={tier} value={tier}>
@@ -295,13 +306,13 @@ export default function EnquirePage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                    <label htmlFor="field-timeline" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                       Target Timeline *
                     </label>
-                    <select
+                    <select id="field-timeline" name="timeline"
                       value={formData.timeline}
                       onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                      className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                     >
                       {timelines.map((time) => (
                         <option key={time} value={time}>
@@ -323,29 +334,29 @@ export default function EnquirePage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                  <label htmlFor="field-scopeDescription" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                     Describe your software vision & core features *
                   </label>
-                  <textarea
+                  <textarea id="field-scopeDescription" name="scopeDescription"
                     required
                     rows={4}
                     placeholder="Tell us what you want to build, who your users are, key integrations needed (e.g. Razorpay, WhatsApp, GPS), and any non-negotiable architectural requirements..."
                     value={formData.scopeDescription}
                     onChange={(e) => setFormData({ ...formData, scopeDescription: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors leading-relaxed"
+                    className="min-w-0 w-full px-4 py-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors leading-relaxed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                  <label htmlFor="field-specDocLink" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                     Figma / PRD / Spec Document Link (Optional)
                   </label>
-                  <input
+                  <input id="field-specDocLink" name="specDocLink" autoComplete="url"
                     type="url"
                     placeholder="https://drive.google.com/... or https://figma.com/..."
                     value={formData.specDocLink}
                     onChange={(e) => setFormData({ ...formData, specDocLink: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                    className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -363,10 +374,10 @@ export default function EnquirePage() {
                 className="w-full py-4 rounded-xl bg-[var(--gold-primary)] text-black font-semibold text-sm uppercase tracking-wider hover:bg-[var(--gold-hover)] transition-all shadow-lg hover:shadow-xl cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
-                  <span>Evaluating Scope...</span>
+                  <span>Sending request...</span>
                 ) : (
                   <>
-                    <span>Submit Project for Engineering Review</span>
+                    <span>Send Project Request</span>
                     <Send className="w-4 h-4" />
                   </>
                 )}

@@ -29,7 +29,7 @@ export default function SocialMediaPage() {
   return <>
     <Navbar />
     <main className="overflow-x-clip bg-[var(--bg-base)] pt-28 text-[var(--text-primary)]">
-      <section className={`${sectionClass} grid items-center gap-12 pt-8 lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:pt-16`} aria-labelledby="social-title">
+      <section className={`${sectionClass} grid grid-cols-1 items-center gap-12 pt-8 lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:pt-16`} aria-labelledby="social-title">
         <div>
           <p className={eyebrowClass}>Vicinix · Marketing & Events</p>
           <h1 id="social-title" className="font-serif text-4xl font-bold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">Make your brand <span className="text-[var(--gold-primary)]">the next thing people talk about.</span></h1>
@@ -40,9 +40,9 @@ export default function SocialMediaPage() {
           </div>
           <p className="mt-5 text-sm text-[var(--text-muted)]">A plan for your business. A clear scope. A tailored quote.</p>
         </div>
-        <div className="liquid-glass relative rounded-[2rem] p-6 sm:p-9">
-          <div className="mb-6 flex items-center justify-between border-b border-[var(--border-subtle)] pb-5"><span className="font-serif text-lg font-bold tracking-widest">YOUR NEXT CHAPTER</span><Sparkles aria-hidden="true" className="h-6 w-6 text-[var(--gold-primary)]" /></div>
-          <div className="flex min-h-44 items-center gap-5 rounded-2xl bg-[var(--badge-bg)] p-6 sm:min-h-52"><PartyPopper aria-hidden="true" className="h-14 w-14 shrink-0 text-[var(--gold-primary)]" /><p className="font-serif text-2xl font-bold leading-snug sm:text-3xl">Build a presence.<br />Start a conversation.<br />Create an experience.</p></div>
+        <div className="liquid-glass relative min-w-0 rounded-[2rem] p-6 sm:p-9">
+          <div className="mb-6 flex items-center justify-between border-b border-[var(--border-subtle)] pb-5"><span className="font-serif text-base font-bold tracking-widest sm:text-lg">YOUR NEXT CHAPTER</span><Sparkles aria-hidden="true" className="h-6 w-6 text-[var(--gold-primary)]" /></div>
+          <div className="flex min-h-44 flex-col items-start gap-5 rounded-2xl bg-[var(--badge-bg)] p-4 sm:min-h-52 sm:flex-row sm:items-center sm:p-6"><PartyPopper aria-hidden="true" className="h-14 w-14 shrink-0 text-[var(--gold-primary)]" /><p className="min-w-0 font-serif text-xl font-bold leading-snug sm:text-3xl">Build a presence.<br />Start a conversation.<br />Create an experience.</p></div>
           <p className="mb-3 mt-6 text-sm text-[var(--text-muted)]">A connected approach to your online presence</p>
           <div className="grid grid-cols-2 gap-3">{[[Camera, "Create"], [CalendarDays, "Post"], [Megaphone, "Promote"], [ChartNoAxesCombined, "Learn"]].map(([Icon, label]) => {
             const TileIcon = Icon as typeof Camera;
@@ -94,7 +94,7 @@ export default function SocialMediaPage() {
 
       <section className="mx-auto max-w-4xl px-5 pb-16 sm:px-8 sm:pb-24" aria-labelledby="faq-title"><p className={eyebrowClass}>Before we get started</p><h2 id="faq-title" className={`${headingClass} mb-9`}>A few useful answers.</h2><FAQ items={SOCIAL_FAQS} /></section>
 
-      <section id="quote" className="scroll-mt-24 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]" aria-labelledby="quote-title"><div className={`${sectionClass} grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]`}>
+      <section id="quote" className="scroll-mt-24 border-t border-[var(--border-subtle)] bg-[var(--bg-elevated)]" aria-labelledby="quote-title"><div className={`${sectionClass} grid grid-cols-1 items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]`}>
         <div><p className={eyebrowClass}>Let’s talk about your place</p><h2 id="quote-title" className={headingClass}>Your next chapter starts with a conversation.</h2><p className="mt-6 text-lg leading-relaxed text-[var(--text-muted)]">Tell us what you are building and where you want to grow. We will put together a quote around your needs, with deliverables, ad spend and any event or vendor costs clearly separated.</p><div className="mt-8 flex items-center gap-3 text-[var(--gold-primary)]"><Layers aria-hidden="true" className="h-6 w-6 shrink-0" /><span>Social media. Branding. Campaigns. Events.</span></div><TrackedLink href={SOCIAL_WHATSAPP_URL} whatsapp placement="quote_intro" className="mt-8 inline-flex min-h-12 items-center font-semibold text-[var(--gold-primary)] underline underline-offset-4">Talk to us on WhatsApp</TrackedLink></div>
         <QuoteForm />
       </div></section>

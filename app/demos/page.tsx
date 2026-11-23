@@ -37,6 +37,8 @@ export default function DemosPage() {
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">Visit our websites, try a sample software workflow or explore the Events interface. Each product is labelled so you can tell a demo, live client deployment and planned concept apart.</p>
           <nav aria-label="Demos page sections" className="my-8 flex flex-wrap gap-3">{[["#websites", "Websites"], ["#software-demos", "Software demos"], ["#event-screenshots", "Event screenshots"]].map(([href, label]) => <a key={href} href={href} className="inline-flex min-h-11 items-center rounded-full border border-[var(--border-highlight)] px-5 py-2 font-medium text-[var(--gold-primary)]">{label}</a>)}</nav>
 
+          <Link href="/playground" className="mb-10 flex min-h-16 flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-6"><span className="font-semibold">Vicinix Business Playground</span><span className="text-sm text-[var(--text-muted)]">Assemble a business and try its connected tools</span></Link>
+
           <section id="websites" aria-labelledby="websites-title" className="scroll-mt-28 border-t border-[var(--border-subtle)] py-12">
             <p className="mb-3 text-sm font-medium uppercase tracking-widest text-[var(--gold-primary)]">Website showcase</p>
             <h2 id="websites-title" className="font-serif text-3xl font-bold sm:text-4xl">Open a website. Explore the experience.</h2>

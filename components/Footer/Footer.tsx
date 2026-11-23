@@ -120,6 +120,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li><Link href="/demos" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">Demos &amp; Websites</Link></li>
+              <li><Link href="/playground" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">Business Playground</Link></li>
               <li>
                 <Link href="/enquire" className="hover:text-[var(--text-primary)] transition-colors block py-0.5">
                   Personal Software

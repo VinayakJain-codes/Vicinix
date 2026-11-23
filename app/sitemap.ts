@@ -9,6 +9,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Core static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
+      url: `${BASE_URL}/playground`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/demos`,
       lastModified: now,
       changeFrequency: "monthly",

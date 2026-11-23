@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -32,22 +32,32 @@ function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const sending = useRef(false);
+  const feedback = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitted || errorMessage) feedback.current?.focus();
+  }, [submitted, errorMessage]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (sending.current) return;
+    sending.current = true;
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const result = await sendContactEmail(formData);
-    setIsSubmitting(false);
-
-    if (result.success) {
-      setSubmitted(true);
-    } else {
-      setErrorMessage(
-        result.error ||
-          "Failed to transmit message. Please retry or write directly to mail@vicinix.co.in."
-      );
+    try {
+      const result = await sendContactEmail(formData);
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(result.error);
+      }
+    } catch {
+      setErrorMessage("We could not send your message. Your details are still here; please try again or email mail@vicinix.co.in.");
+    } finally {
+      sending.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -130,15 +140,15 @@ function ContactForm() {
       {/* Main General Form */}
       <div className="lg:col-span-7">
         {submitted ? (
-          <div className="rounded-3xl border border-[var(--border-highlight)] bg-[var(--bg-surface)] p-8 sm:p-12 text-center shadow-xl">
+          <div ref={feedback} tabIndex={-1} role="status" className="scroll-mt-28 rounded-3xl border border-[var(--border-highlight)] bg-[var(--bg-surface)] p-8 sm:p-12 text-center shadow-xl">
             <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <h3 className="font-serif text-2xl font-bold text-[var(--text-primary)] mb-2">
-              Message Recorded
+              Message sent
             </h3>
             <p className="text-sm text-[var(--text-muted)] max-w-md mx-auto mb-3">
-              Thank you, <span className="text-[var(--text-primary)] font-semibold">{formData.name}</span>. Your inquiry has been successfully recorded.
+              Thank you, <span className="text-[var(--text-primary)] font-semibold">{formData.name}</span>. Your message has been submitted for email delivery.
             </p>
             <p className="text-xs text-[var(--text-muted)] max-w-md mx-auto mb-6">
               Our team will review your message and respond to <span className="text-[var(--gold-primary)] font-semibold">{formData.email}</span> within 24 business hours.
@@ -163,14 +173,15 @@ function ContactForm() {
         ) : (
           <form
             onSubmit={handleSubmit}
+            aria-busy={isSubmitting}
             className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-10 shadow-xl space-y-6"
           >
             {errorMessage && (
-              <div className="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-xs text-red-300 flex items-start gap-3">
+              <div ref={feedback} tabIndex={-1} role="alert" className="scroll-mt-28 p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-sm text-[var(--text-primary)] flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" />
                 <div className="flex-1 space-y-1">
-                  <p className="font-semibold text-red-200">Unable to dispatch email</p>
-                  <p className="text-red-300/80">{errorMessage}</p>
+                  <p className="font-semibold text-[var(--text-primary)]">Unable to dispatch email</p>
+                  <p className="text-[var(--text-primary)]">{errorMessage}</p>
                   <p className="text-[11px] text-[var(--text-muted)] pt-1">
                     Direct alternative:{" "}
                     <a
@@ -185,42 +196,42 @@ function ContactForm() {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                <label htmlFor="field-name" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                   Your Name *
                 </label>
-                <input
+                <input id="field-name" name="name" autoComplete="name"
                   type="text"
                   required
                   placeholder="e.g. Rahul Sharma"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                  className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+                <label htmlFor="field-email" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                   Email Address *
                 </label>
-                <input
+                <input id="field-email" name="email" autoComplete="email"
                   type="email"
                   required
                   placeholder="e.g. rahul@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                  className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+              <label htmlFor="field-department" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                 Department / Inquiry Type *
               </label>
-              <select
+              <select id="field-department" name="department"
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
               >
                 <option value="General Inquiry">General Business Inquiry</option>
                 <option value="Custom Software">Custom Software Engineering & Bespoke Apps</option>
@@ -236,30 +247,30 @@ function ContactForm() {
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+              <label htmlFor="field-subject" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                 Subject *
               </label>
-              <input
+              <input id="field-subject" name="subject"
                 type="text"
                 required
                 placeholder="Brief summary of your inquiry"
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
+                className="min-w-0 w-full px-4 py-2.5 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
+              <label htmlFor="field-message" className="block text-xs font-mono text-[var(--text-muted)] mb-1.5">
                 Message *
               </label>
-              <textarea
+              <textarea id="field-message" name="message"
                 required
                 rows={5}
                 placeholder="How can Vicinix help your organization?"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors leading-relaxed"
+                className="min-w-0 w-full px-4 py-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50 focus:border-[var(--gold-primary)] focus:outline-none transition-colors leading-relaxed"
               />
             </div>
 

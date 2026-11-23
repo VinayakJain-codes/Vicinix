@@ -229,10 +229,11 @@ export default function InvoiceDashboard() {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
               <input
                 type="text"
+                aria-label="Search invoices by number or client"
                 placeholder="Search invoice # or client..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--gold-primary)] focus:outline-none transition-colors font-mono"
+                className="min-h-11 w-full pl-10 pr-4 py-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--gold-primary)] focus:outline-none transition-colors"
               />
             </div>
 
@@ -242,7 +243,8 @@ export default function InvoiceDashboard() {
                   type="button"
                   key={status}
                   onClick={() => setSelectedStatus(status)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap ${
+                  aria-pressed={selectedStatus === status}
+                  className={`min-h-11 shrink-0 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap ${
                     selectedStatus === status
                       ? "bg-[var(--gold-primary)] text-black font-bold"
                       : "text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-[var(--bg-elevated)]"

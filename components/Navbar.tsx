@@ -18,6 +18,28 @@ export default function Navbar() {
 
   const solutionsRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        mobileToggleRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMobileMenuOpen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,13 +73,13 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${mobileMenuOpen ? "flex h-dvh flex-col" : ""} ${
+        mobileMenuOpen ? "bg-[var(--bg-base)] py-3" : isScrolled
           ? "bg-[var(--navbar-bg)] backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-sm py-3"
           : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full shrink-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
           {/* Brand Logo */}
@@ -236,10 +258,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3 xl:hidden">
             <ThemeToggle />
             <button
+              ref={mobileToggleRef}
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors"
+              className="min-h-11 min-w-11 p-2 rounded-lg text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors"
               aria-label="Toggle Navigation Menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -250,7 +275,31 @@ export default function Navbar() {
 
       {/* Mobile Flyout Menu */}
       {mobileMenuOpen && (
-        <div className="xl:hidden fixed inset-x-0 top-[65px] bottom-0 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] p-6 overflow-y-auto space-y-6 animate-in slide-in-from-top-4 duration-300">
+        <nav id="mobile-navigation" aria-label="Mobile navigation" onClick={(event) => { if ((event.target as HTMLElement).closest("a")) setMobileMenuOpen(false); }} className="xl:hidden mt-3 min-h-0 flex-1 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain space-y-6">
+          <div className="border-b border-[var(--border-subtle)] pb-4 space-y-2">
+            <Link href="/demos" aria-current={pathname === "/demos" ? "page" : undefined} onClick={() => setMobileMenuOpen(false)} className="flex min-h-11 items-center py-2 text-sm font-medium text-[var(--text-primary)]">Demos &amp; Websites</Link>
+            <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className="flex min-h-11 items-center py-2 text-sm font-medium text-[var(--gold-primary)]" onClick={() => setMobileMenuOpen(false)}>
+              Marketing &amp; Events
+            </Link>
+            <Link
+              href="/about"
+              className="flex min-h-11 items-center py-2 text-sm font-medium text-[var(--text-primary)]"
+            >
+              Company / About
+            </Link>
+            <Link
+              href="/enquire"
+              className="flex min-h-11 items-center py-2 text-sm font-medium text-[var(--gold-primary)]"
+            >
+              Enquire for Custom Software →
+            </Link>
+            <Link
+              href="/contact"
+              className="flex min-h-11 items-center py-2 text-sm font-medium text-[var(--text-primary)]"
+            >
+              Contact Support & Sales
+            </Link>
+          </div>
           <div>
             <div className="text-xs font-mono uppercase text-[var(--gold-primary)] mb-3 tracking-wider">
               Solutions
@@ -298,31 +347,8 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="border-t border-[var(--border-subtle)] pt-4 space-y-2">
-            <Link href="/demos" aria-current={pathname === "/demos" ? "page" : undefined} onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[var(--text-primary)]">Demos &amp; Websites</Link>
-            <Link href="/social-media" aria-current={pathname === "/social-media" ? "page" : undefined} className="block py-2 text-sm font-medium text-[var(--gold-primary)]" onClick={() => setMobileMenuOpen(false)}>
-              Marketing &amp; Events
-            </Link>
-            <Link
-              href="/about"
-              className="block py-2 text-sm font-medium text-[var(--text-primary)]"
-            >
-              Company / About
-            </Link>
-            <Link
-              href="/enquire"
-              className="block py-2 text-sm font-medium text-[var(--gold-primary)]"
-            >
-              Enquire for Custom Software →
-            </Link>
-            <Link
-              href="/contact"
-              className="block py-2 text-sm font-medium text-[var(--text-primary)]"
-            >
-              Contact Support & Sales
-            </Link>
-          </div>
-        </div>
+
+        </nav>
       )}
     </header>
   );

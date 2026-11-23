@@ -60,7 +60,7 @@ export default function HomePage() {
 
             {/* Main Headline */}
             <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[var(--text-primary)] leading-[1.08] mb-6">
-              Build your business.<br className="hidden sm:inline" />
+              Build your business.{" "}<br className="hidden sm:inline" />
               <span className="text-gold-gradient font-serif">Grow your presence.</span>
             </h1>
 
@@ -116,6 +116,16 @@ export default function HomePage() {
             CATEGORIES OVERVIEW (Liquid Glass 3 Pillars)
             ========================================================================= */}
         <ChooseGoal />
+
+        <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8" aria-labelledby="playground-title">
+          <div className="flex flex-col gap-6 rounded-3xl border border-[var(--border-highlight)] bg-[var(--badge-bg)] p-7 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <h2 id="playground-title" className="font-serif text-3xl font-bold">Build a miniature business.</h2>
+              <p className="mt-4 leading-relaxed text-[var(--text-muted)]">Explore the full Vicinix software suite in the Business Playground. Connect tools for your café, event, campus or business and try their sample workflows.</p>
+            </div>
+            <Link href="/playground" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[var(--text-primary)] px-6 py-3 font-semibold text-[var(--bg-base)]">Open the playground</Link>
+          </div>
+        </section>
 
         <section id="software" className="scroll-mt-24 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
